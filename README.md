@@ -145,9 +145,11 @@ sequenceDiagram
 
 ## 🚀 Schnellstart - App zum Laufen bringen
 
-**Für Workshop-Teilnehmer**: Um die Anwendung zu starten, fragen Sie Q Developer oder Kiro: *"Wie starte ich diese Flask-Anwendung?"* 
+**Für Workshop-Teilnehmer**: Um die Anwendung zu starten, fragen Sie Q Developer: *"Wie starte ich diese Flask-Anwendung?"* 
 
 **Hinweis**: Nach Installation der Requirements (`pip install -r requirements.txt`) führen Sie `python app.py` aus und öffnen Sie http://localhost:5000
+
+💡 **Q Developer Tipp**: Nutzen Sie `@workspace` um Q Developer den gesamten Projektkontext zu geben: *"@workspace Analysiere diese Flask-Anwendung und erkläre die Architektur"*
 
 ---
 
@@ -275,9 +277,9 @@ Sie haben einen Überblick über alle Funktionen der Anwendung.
 
 ### Aufgabe
 
-Nutzen Sie Ihren AI-Assistenten (Q Developer, Kiro, etc.), um die Anwendungsstruktur zu verstehen.
+Nutzen Sie Q Developer, um die Anwendungsstruktur zu verstehen.
 
-**Fragen Sie Ihren AI-Assistenten:**
+**Fragen Sie Q Developer:**
 
 1. **Über die Hauptseiten:**
    - "Erkläre in 1-2 Sätzen, was die Dashboard-Seite macht"
@@ -294,22 +296,24 @@ Nutzen Sie Ihren AI-Assistenten (Q Developer, Kiro, etc.), um die Anwendungsstru
    - "Was macht die Klasse `SensorProcessor` in `services/sensor_processor.py`?"
    - "Erkläre die Datenbank-Tabellen in `schema.sql`"
 
-### Beispiel-Prompts
+### Beispiel-Prompts für Q Developer
 
 ```
-"Analysiere die Datei routes/web.py und erkläre mir in 2-3 Sätzen, 
+"@file routes/web.py Analysiere diese Datei und erkläre mir in 2-3 Sätzen, 
 welche Hauptfunktionen diese Routen bereitstellen."
 ```
 
 ```
-"Schaue dir services/alert_generator.py an und erkläre, 
+"@file services/alert_generator.py Schaue dir diese Datei an und erkläre, 
 wann und wie Alarme generiert werden."
 ```
 
 ```
-"Öffne templates/dashboard.html und beschreibe, 
+"@file templates/dashboard.html Öffne diese Datei und beschreibe, 
 welche Informationen auf dem Dashboard angezeigt werden."
 ```
+
+💡 **Q Developer Tipp**: Verwenden Sie `@file` um spezifische Dateien zu referenzieren und `@folder` für ganze Ordner wie `@folder repositories`
 
 ### Erwartetes Ergebnis
 
@@ -396,9 +400,9 @@ Sie sollten feststellen, dass **mindestens zwei Seiten** nicht funktionieren und
 
 ### Aufgabe
 
-Nutzen Sie Ihren AI-Assistenten (Q Developer oder Kiro), um die Fehler zu analysieren.
+Nutzen Sie Q Developer, um die Fehler zu analysieren.
 
-**Fragen Sie Ihren AI-Assistenten**:
+**Fragen Sie Q Developer:**
 - "Ich bekomme einen TemplateNotFound Fehler für [Template-Name]. Was könnte das Problem sein?"
 - "Analysiere die Datei `routes/web.py` - welche Templates werden referenziert?"
 - "Überprüfe den `templates/` Ordner - gibt es fehlende oder falsch benannte Dateien?"
@@ -408,18 +412,20 @@ Nutzen Sie Ihren AI-Assistenten (Q Developer oder Kiro), um die Fehler zu analys
 
 ```
 "Ich erhalte einen Fehler 'TemplateNotFound: maintenance_list.html'. 
-Kannst du prüfen, ob die Datei existiert und ob der Name korrekt ist?"
+@file routes/web.py @folder templates Kannst du prüfen, ob die Datei existiert?"
 ```
 
 ```
-"Analysiere routes/web.py und liste alle render_template() Aufrufe auf. 
-Vergleiche diese mit den Dateien im templates/ Ordner."
+"@file routes/web.py Analysiere diese Datei und liste alle render_template() Aufrufe auf. 
+@folder templates Vergleiche diese mit den Dateien im templates/ Ordner."
 ```
 
 ```
-"Welche Template-Dateien werden in der Anwendung verwendet, 
+"/review Welche Template-Dateien werden in der Anwendung verwendet, 
 aber existieren nicht im templates/ Ordner?"
 ```
+
+💡 **Q Developer Tipp**: Nutzen Sie `/review` für Code-Analyse und kombinieren Sie `@file` mit `@folder` für besseren Kontext
 
 ### Erwartetes Ergebnis
 
@@ -519,10 +525,12 @@ Sie verstehen:
 
 Analysieren Sie die bestehende Anwendung und identifizieren Sie fehlende Equipment-Management-Funktionen.
 
-**Fragen Sie Ihren AI-Assistenten**:
-- "Öffne `services/equipment_manager.py` - Welche Methoden sind implementiert?"
-- "Öffne `routes/web.py` - Welche Equipment-Routen existieren bereits?"
-- "Vergleiche die beiden Dateien - welche Funktionen fehlen in der Web-UI?"
+**Fragen Sie Q Developer:**
+- "@file services/equipment_manager.py Welche Methoden sind in dieser Klasse implementiert?"
+- "@file routes/web.py Welche Equipment-Routen existieren bereits?"
+- "@file services/equipment_manager.py @file routes/web.py Vergleiche diese Dateien - welche Funktionen fehlen in der Web-UI?"
+
+💡 **Q Developer Tipp**: Verwenden Sie mehrere `@file` Referenzen um Dateien zu vergleichen
 
 <details>
 <summary>💡 <strong>Hinweis: Erwartetes Ergebnis</strong> (klicken zum Anzeigen)</summary>
@@ -549,11 +557,13 @@ Sie sollten feststellen:
 
 Erstellen Sie eine neue Route in `routes/web.py` zum Bearbeiten von Equipment.
 
-**Fragen Sie Ihren AI-Assistenten**:
-- "Erstelle eine Route `/equipment/<equipment_id>/edit` mit GET und POST Methoden"
+**Fragen Sie Q Developer:**
+- "/dev Erstelle eine Route `/equipment/<equipment_id>/edit` mit GET und POST Methoden"
 - "Die GET-Methode soll ein Formular mit den aktuellen Equipment-Daten anzeigen"
-- "Die POST-Methode soll die `update_equipment()` Methode vom EquipmentManager aufrufen"
+- "@file services/equipment_manager.py Die POST-Methode soll die `update_equipment()` Methode aufrufen"
 - "Nach erfolgreichem Update soll zur Equipment-Detail-Seite weitergeleitet werden"
+
+💡 **Q Developer Tipp**: Nutzen Sie `/dev` für Feature-Entwicklung und referenzieren Sie bestehende Services mit `@file`
 
 ### Implementierung
 
@@ -773,10 +783,12 @@ Testen Sie den kompletten Equipment-Management-Workflow.
 
 ### Aufgabe
 
-**Fragen Sie Ihren AI-Assistenten**:
+**Fragen Sie Q Developer:**
 - "Was ist Property-Based Testing und wie unterscheidet es sich von Unit-Tests?"
 - "Erkläre mir, wie Hypothesis funktioniert"
-- "Zeige mir Beispiele für gute Properties in diesem Projekt"
+- "@file test_equipment_properties.py Zeige mir Beispiele für gute Properties in diesem Projekt"
+
+💡 **Q Developer Tipp**: Q Developer kann `/test` verwenden um automatisch Tests zu generieren
 
 ### Analyse
 
@@ -800,9 +812,9 @@ Sie verstehen:
 
 Schreiben Sie einen neuen Property-Test für die Alarmgenerierung.
 
-**Fragen Sie Ihren AI-Assistenten**:
-- "Schreibe einen Property-Test, der prüft, dass Alarme bei Schwellwertüberschreitung generiert werden"
-- "Wie erstelle ich einen Hypothesis-Generator für Sensordaten?"
+**Fragen Sie Q Developer:**
+- "/test Schreibe einen Property-Test, der prüft, dass Alarme bei Schwellwertüberschreitung generiert werden"
+- "@file test_alert_properties.py Wie erstelle ich einen Hypothesis-Generator für Sensordaten?"
 
 ### Implementierung
 
@@ -877,10 +889,12 @@ def test_equipment_roundtrip(equipment):
 
 **Problem**: Das Dashboard lädt Sensordaten ineffizient.
 
-**Fragen Sie Ihren AI-Assistenten**:
-- "Analysiere `repositories/sensor_data.py` auf N+1 Query Probleme"
-- "Wie kann ich die `get_latest_readings()` Methode optimieren?"
+**Fragen Sie Q Developer:**
+- "@file repositories/sensor_data.py Analysiere diese Datei auf N+1 Query Probleme"
+- "@file repositories/sensor_data.py Wie kann ich die `get_latest_readings()` Methode optimieren?"
 - "Was ist ein N+1 Query Problem und warum ist es problematisch?"
+
+💡 **Q Developer Tipp**: Q Developer erkennt Performance-Probleme automatisch und kann SQL-Optimierungen vorschlagen
 
 ### Analyse
 
@@ -1021,12 +1035,14 @@ Sollte jetzt "SEARCH ... USING INDEX" anzeigen statt "SCAN".
 
 ### Aufgabe
 
-Nutzen Sie Ihren AI-Assistenten für eine erste Sicherheitsanalyse der Codebasis.
+Nutzen Sie Q Developer für eine erste Sicherheitsanalyse der Codebasis.
 
-**Fragen Sie Ihren AI-Assistenten**:
-- "Analysiere die Datei `repositories/equipment.py` auf Sicherheitsprobleme"
-- "Überprüfe `config.py` auf Sicherheitsrisiken"
-- "Untersuche `routes/api.py` auf fehlende Sicherheitsmaßnahmen"
+**Fragen Sie Q Developer:**
+- "/review @file repositories/equipment.py Analysiere diese Datei auf Sicherheitsprobleme"
+- "/review @file config.py Überprüfe diese Datei auf Sicherheitsrisiken"
+- "/review @file routes/api.py Untersuche diese Datei auf fehlende Sicherheitsmaßnahmen"
+
+💡 **Q Developer Tipp**: Verwenden Sie `/review` für Sicherheitsanalysen - Q Developer erkennt automatisch häufige Schwachstellen
 
 **Ihre Aufgabe**: Lassen Sie den AI-Assistenten die Dateien analysieren und dokumentieren Sie die gefundenen Probleme.
 
@@ -1339,5 +1355,36 @@ Nach dem Workshop können Sie:
 3. **Test-Coverage erweitern** mit mehr Property-Tests
 4. **CI/CD Pipeline** einrichten für automatisierte Tests
 5. **Monitoring und Logging** hinzufügen für Production
+
+---
+
+## 🤖 Q Developer Cheat Sheet für den Workshop
+
+### Wichtige Chat-Befehle
+- `/dev` - Entwicklungshilfe für neue Features
+- `/test` - Hilfe beim Schreiben und Verbessern von Tests  
+- `/review` - Code-Review und Sicherheitsanalyse
+- `/docs` - Dokumentation generieren und verbessern
+
+### Kontext-Integration
+- `@file filename.py` - Spezifische Datei einbeziehen
+- `@folder foldername` - Ganzen Ordner als Kontext verwenden
+- `@workspace` - Relevante Workspace-Dateien automatisch einbeziehen
+
+### Beispiel-Prompts für diesen Workshop
+```
+"@workspace Analysiere diese Flask-Anwendung für Sicherheitsprobleme"
+"/review @file repositories/equipment.py Finde SQL-Injection-Schwachstellen"
+"/test @file services/sensor_processor.py Generiere Property-Based Tests"
+"@file repositories/sensor_data.py Optimiere die Datenbankabfragen"
+"/dev Erstelle eine neue Route für Equipment-Bearbeitung"
+```
+
+### Schlüssel-Fähigkeiten von Q Developer
+✅ **Sicherheitsanalyse**: Erkennt Schwachstellen und Sicherheitsprobleme automatisch  
+✅ **Performance-Optimierung**: Findet und behebt Performance-Engpässe  
+✅ **Test-Generierung**: Erstellt umfassende Test-Suites  
+✅ **Code-Ausführung**: Führt Bash-Befehle und Skripte aus  
+✅ **Datei-Operationen**: Liest, schreibt und modifiziert Dateien im Workspace  
 
 **Viel Erfolg beim Workshop! 🚀**
