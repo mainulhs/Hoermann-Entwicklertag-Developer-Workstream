@@ -231,6 +231,8 @@ Alle Tests sollten erfolgreich durchlaufen (grün).
 
 💡 **Tipp**: Diese Tests verwenden Property-Based Testing mit Hypothesis - eine moderne Testmethode, die automatisch viele Testfälle generiert.
 
+⚠️ **Wichtig**: Tests prüfen die Business-Logik, aber nicht die UI! Auch wenn alle Tests grün sind, können UI-Probleme existieren. Deshalb ist manuelles Testen der Anwendung (Phase 2) wichtig!
+
 </details>
 
 ---
@@ -376,6 +378,8 @@ Sie wissen, wo Sie welchen Code finden:
 Sie sollten feststellen, dass **mindestens zwei Seiten** nicht funktionieren und Fehlermeldungen wie "TemplateNotFound" anzeigen.
 
 💡 **Tipp**: Achten Sie auf die Fehlermeldungen im Terminal - sie geben wichtige Hinweise!
+
+⚠️ **Wichtige Erkenntnis**: Die Tests in Task 0.3 waren alle grün, aber die Anwendung hat trotzdem Fehler! Das zeigt: **Automatisierte Tests allein reichen nicht** - Sie müssen die Anwendung auch manuell testen, um UI-Probleme zu finden.
 
 </details>
 
