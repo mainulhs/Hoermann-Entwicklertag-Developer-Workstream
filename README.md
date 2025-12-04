@@ -143,6 +143,14 @@ sequenceDiagram
 
 ---
 
+## 🚀 Schnellstart - App zum Laufen bringen
+
+**Für Workshop-Teilnehmer**: Um die Anwendung zu starten, fragen Sie Q Developer oder Kiro: *"Wie starte ich diese Flask-Anwendung?"* 
+
+**Hinweis**: Nach Installation der Requirements (`pip install -r requirements.txt`) führen Sie `python app.py` aus und öffnen Sie http://localhost:5000
+
+---
+
 ## Task 0: Entwicklungsumgebung vorbereiten
 
 <details>
