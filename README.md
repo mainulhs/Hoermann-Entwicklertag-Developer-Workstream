@@ -182,8 +182,7 @@ pip list    # Sollte Flask, Hypothesis, pytest zeigen
 pip3 list   # Alternative, falls pip nicht funktioniert
 ```
 
-> [!TIP]
-> Auf Windows-Systemen funktioniert meist `python` und `pip`. Auf manchen Systemen (Mac/Linux) müssen Sie `python3` und `pip3` verwenden.
+💡 **Tipp**: Auf Windows-Systemen funktioniert meist `python` und `pip`. Auf manchen Systemen (Mac/Linux) müssen Sie `python3` und `pip3` verwenden.
 
 </details>
 
@@ -211,8 +210,7 @@ pip3 list   # Alternative, falls pip nicht funktioniert
 - Aktive Alarme werden angezeigt
 - Navigation funktioniert
 
-> [!TIP]
-> Lassen Sie die Anwendung im Hintergrund laufen während Sie am Code arbeiten.
+💡 **Tipp**: Lassen Sie die Anwendung im Hintergrund laufen während Sie am Code arbeiten.
 
 </details>
 
@@ -231,8 +229,7 @@ pytest -v
 
 Alle Tests sollten erfolgreich durchlaufen (grün).
 
-> [!TIP]
-> Diese Tests verwenden Property-Based Testing mit Hypothesis - eine moderne Testmethode, die automatisch viele Testfälle generiert.
+💡 **Tipp**: Diese Tests verwenden Property-Based Testing mit Hypothesis - eine moderne Testmethode, die automatisch viele Testfälle generiert.
 
 </details>
 
@@ -268,7 +265,7 @@ Sie haben einen Überblick über alle Funktionen der Anwendung.
 
 ### Aufgabe
 
-Nutzen Sie Ihren AI-Assistenten (Q Developer, Copilot, etc.), um die Anwendungsstruktur zu verstehen.
+Nutzen Sie Ihren AI-Assistenten (Q Developer, Kiro, etc.), um die Anwendungsstruktur zu verstehen.
 
 **Fragen Sie Ihren AI-Assistenten:**
 
@@ -311,8 +308,7 @@ Sie verstehen:
 - Wie die verschiedenen Layer (Routes → Services → Repositories → Database) zusammenarbeiten
 - Welche Funktionalität jede Seite bietet
 
-> [!TIP]
-> Nutzen Sie AI nicht nur zum Code schreiben, sondern auch zum Code verstehen! Das spart Zeit und hilft beim Onboarding.
+💡 **Tipp**: Nutzen Sie AI nicht nur zum Code schreiben, sondern auch zum Code verstehen! Das spart Zeit und hilft beim Onboarding.
 
 </details>
 
@@ -343,13 +339,169 @@ Sie wissen, wo Sie welchen Code finden:
 
 ---
 
-## Phase 2: Feature-Entwicklung - Equipment Management erweitern (45 Minuten)
+## Phase 2: Fehlersuche und Debugging mit AI (20 Minuten)
+
+> [!NOTE]
+> **Lernziel**: Lernen Sie, wie AI-Assistenten (Q Developer, Kiro) Ihnen helfen können, Fehler schnell zu identifizieren und zu beheben.
+
+<details>
+<summary><strong>Task 2.1: Anwendung starten und Fehler entdecken</strong></summary>
+
+### Aufgabe
+
+⚠️ **Achtung**: In dieser Übung wurden absichtlich zwei Template-Dateien umbenannt, um realistische Fehler zu simulieren!
+
+1. **Starten Sie die Anwendung**:
+   ```bash
+   python app.py
+   # Falls das nicht funktioniert:
+   python3 app.py
+   ```
+
+2. **Testen Sie alle Seiten** im Browser (http://localhost:5000):
+   - Dashboard
+   - Anlage hinzufügen
+   - Messwert erfassen
+   - Wartung
+   - Alarme
+   - Anmelden
+
+3. **Dokumentieren Sie die Fehler**:
+   - Welche Seiten funktionieren nicht?
+   - Was zeigt der Browser an?
+   - Was steht in der Konsole/Terminal?
+
+### Erwartetes Ergebnis
+
+Sie sollten feststellen, dass **mindestens zwei Seiten** nicht funktionieren und Fehlermeldungen wie "TemplateNotFound" anzeigen.
+
+💡 **Tipp**: Achten Sie auf die Fehlermeldungen im Terminal - sie geben wichtige Hinweise!
+
+</details>
+
+<details>
+<summary><strong>Task 2.2: AI-Assistent zur Fehleranalyse nutzen</strong></summary>
+
+### Aufgabe
+
+Nutzen Sie Ihren AI-Assistenten (Q Developer oder Kiro), um die Fehler zu analysieren.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Ich bekomme einen TemplateNotFound Fehler für [Template-Name]. Was könnte das Problem sein?"
+- "Analysiere die Datei `routes/web.py` - welche Templates werden referenziert?"
+- "Überprüfe den `templates/` Ordner - gibt es fehlende oder falsch benannte Dateien?"
+- "Vergleiche die Template-Namen in `routes/web.py` mit den tatsächlichen Dateinamen im `templates/` Ordner"
+
+### Beispiel-Prompts
+
+```
+"Ich erhalte einen Fehler 'TemplateNotFound: maintenance_list.html'. 
+Kannst du prüfen, ob die Datei existiert und ob der Name korrekt ist?"
+```
+
+```
+"Analysiere routes/web.py und liste alle render_template() Aufrufe auf. 
+Vergleiche diese mit den Dateien im templates/ Ordner."
+```
+
+```
+"Welche Template-Dateien werden in der Anwendung verwendet, 
+aber existieren nicht im templates/ Ordner?"
+```
+
+### Erwartetes Ergebnis
+
+Der AI-Assistent sollte Ihnen helfen zu identifizieren:
+- Welche Template-Dateien fehlen oder falsch benannt sind
+- Welche Dateien umbenannt werden müssen
+- Die genauen Dateinamen, die erwartet werden
+
+💡 **Tipp**: AI-Assistenten sind hervorragend darin, Inkonsistenzen zwischen Code und Dateisystem zu finden!
+
+</details>
+
+<details>
+<summary><strong>Task 2.3: Fehler beheben</strong></summary>
+
+### Aufgabe
+
+Beheben Sie die Fehler, indem Sie die falsch benannten Template-Dateien umbenennen.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Wie benenne ich die Datei [alter-name] in [neuer-name] um?"
+- "Zeige mir den Befehl zum Umbenennen von Dateien"
+
+### Implementierung
+
+Verwenden Sie die Kommandozeile oder Ihren Datei-Explorer:
+
+```bash
+# Mac/Linux
+mv templates/[alter-name].html templates/[neuer-name].html
+
+# Oder nutzen Sie Ihre IDE zum Umbenennen
+```
+
+### Überprüfung
+
+1. Starten Sie die Anwendung neu (falls nötig)
+2. Testen Sie **alle Seiten** erneut:
+   - Dashboard ✅
+   - Anlage hinzufügen ✅
+   - Messwert erfassen ✅
+   - Wartung ✅
+   - Alarme ✅
+   - Anmelden ✅
+
+3. Alle Seiten sollten jetzt ohne Fehler laden!
+
+### Erwartetes Ergebnis
+
+✅ Alle Template-Fehler sind behoben  
+✅ Alle Seiten der Anwendung funktionieren  
+✅ Keine TemplateNotFound Fehler mehr  
+
+💡 **Tipp**: Dies ist ein häufiges Problem in der Praxis - Dateinamen müssen exakt mit den Referenzen im Code übereinstimmen!
+
+</details>
+
+<details>
+<summary><strong>Task 2.4: Reflexion - Was haben Sie gelernt?</strong></summary>
+
+### Diskussionsfragen
+
+1. **Wie hat der AI-Assistent beim Debugging geholfen?**
+   - Schnellere Fehleridentifikation?
+   - Besseres Verständnis der Fehlerursache?
+
+2. **Welche Debugging-Strategien haben Sie angewendet?**
+   - Fehlermeldungen lesen
+   - Code mit Dateisystem vergleichen
+   - Systematisches Testen
+
+3. **Was würden Sie beim nächsten Mal anders machen?**
+   - Früher testen?
+   - Bessere Namenskonventionen?
+   - Automatisierte Tests für Template-Existenz?
+
+### Erwartetes Ergebnis
+
+Sie verstehen:
+- Wie AI-Assistenten beim Debugging helfen können
+- Die Wichtigkeit von konsistenten Dateinamen
+- Wie man systematisch Fehler identifiziert und behebt
+
+</details>
+
+---
+
+## Phase 3: Feature-Entwicklung - Equipment Management erweitern (45 Minuten)
 
 > [!NOTE]
 > **Lernziel**: Nutzen Sie AI-Assistenten, um eine neue Funktion zu entwickeln und in die bestehende Anwendung zu integrieren.
 
 <details>
-<summary><strong>Task 2.1: Fehlende Funktionalität identifizieren</strong></summary>
+<summary><strong>Task 3.1: Fehlende Funktionalität identifizieren</strong></summary>
 
 ### Aufgabe
 
@@ -379,7 +531,7 @@ Sie sollten feststellen:
 </details>
 
 <details>
-<summary><strong>Task 2.2: Equipment-Edit-Route implementieren</strong></summary>
+<summary><strong>Task 3.2: Equipment-Edit-Route implementieren</strong></summary>
 
 ### Aufgabe
 
@@ -433,7 +585,7 @@ Testen Sie die Route manuell:
 </details>
 
 <details>
-<summary><strong>Task 2.3: Equipment-Edit-Template erstellen</strong></summary>
+<summary><strong>Task 3.3: Equipment-Edit-Template erstellen</strong></summary>
 
 ### Aufgabe
 
@@ -481,7 +633,7 @@ Erstellen Sie ein HTML-Template für die Equipment-Bearbeitung.
 </details>
 
 <details>
-<summary><strong>Task 2.4: Equipment-Delete-Route implementieren</strong></summary>
+<summary><strong>Task 3.4: Equipment-Delete-Route implementieren</strong></summary>
 
 ### Aufgabe
 
@@ -525,7 +677,7 @@ def equipment_delete(equipment_id: str):
 </details>
 
 <details>
-<summary><strong>Task 2.5: UI-Buttons zur Equipment-Detail-Seite hinzufügen</strong></summary>
+<summary><strong>Task 3.5: UI-Buttons zur Equipment-Detail-Seite hinzufügen</strong></summary>
 
 ### Aufgabe
 
@@ -568,7 +720,7 @@ Fügen Sie "Bearbeiten" und "Löschen" Buttons zur Equipment-Detail-Seite hinzu.
 </details>
 
 <details>
-<summary><strong>Task 2.6: End-to-End Test durchführen</strong></summary>
+<summary><strong>Task 3.6: End-to-End Test durchführen</strong></summary>
 
 ### Aufgabe
 
@@ -599,247 +751,13 @@ Testen Sie den kompletten Equipment-Management-Workflow.
 
 ---
 
-## Phase 3: Code-Review und Sicherheitsanalyse (30 Minuten)
+## Phase 4: Property-Based Testing (45 Minuten)
 
 > [!NOTE]
-> **Lernziel**: Nutzen Sie AI-Tools (Q Developer, Kiro, Copilot), um Sicherheitslücken in bestehendem Code zu identifizieren.
+> **Lernziel**: Verstehen und erweitern Sie Property-Based Tests mit Hypothesis und AI-Unterstützung (Q Developer, Kiro).
 
 <details>
-<summary><strong>Task 3.1: Codebase-Analyse</strong></summary>
-
-### Aufgabe
-
-Nutzen Sie Ihren AI-Assistenten für eine erste Sicherheitsanalyse der Codebasis.
-
-**Fragen Sie Ihren AI-Assistenten**:
-- "Analysiere die Datei `repositories/equipment.py` auf Sicherheitsprobleme"
-- "Überprüfe `config.py` auf Sicherheitsrisiken"
-- "Untersuche `routes/api.py` auf fehlende Sicherheitsmaßnahmen"
-
-**Ihre Aufgabe**: Lassen Sie den AI-Assistenten die Dateien analysieren und dokumentieren Sie die gefundenen Probleme.
-
-<details>
-<summary>💡 <strong>Hinweis: Erwartete Sicherheitsprobleme</strong> (klicken zum Anzeigen)</summary>
-
-<br>
-
-Der AI-Assistent sollte mindestens diese Probleme identifizieren:
-1. **SQL-Injection** in der `search()` Methode
-2. **Hardcodierte Secrets** in der Konfiguration
-3. **Fehlende Authentifizierung** bei sensiblen API-Endpunkten
-
-📄 **Detaillierte Hinweise**: Öffnen Sie `SECURITY_ISSUES.md` für ausführliche Erklärungen zu den Schwachstellen.
-
-</details>
-
-</details>
-
-<details>
-<summary><strong>Task 3.2: Sicherheitsproblem in Equipment-Repository beheben</strong></summary>
-
-### Aufgabe
-
-⚠️ **Problem**: Die `search()` Methode in `repositories/equipment.py` hat eine Sicherheitslücke.
-
-**Fragen Sie Ihren AI-Assistenten**:
-- "Wie behebe ich die Sicherheitslücke in der search() Methode?"
-- "Zeige mir, wie ich parametrisierte Queries verwende"
-- "Was ist das Problem mit String-Konkatenation in SQL-Queries?"
-
-### Implementierung
-
-1. Öffnen Sie `repositories/equipment.py`
-2. Finden Sie die `search()` Methode
-3. Ersetzen Sie String-Konkatenation durch parametrisierte Queries
-4. Testen Sie die Änderung
-
-### Überprüfung
-
-```bash
-# Dieser Test sollte weiterhin funktionieren
-pytest test_equipment_properties.py -v
-```
-
-> [!CAUTION]
-> **Vorher** (unsicher):
-> ```python
-> sql = f"SELECT * FROM equipment WHERE name LIKE '%{query}%'"
-> ```
-
-> [!TIP]
-> **Nachher** (sicher):
-> ```python
-> sql = "SELECT * FROM equipment WHERE name LIKE ?"
-> params = (f'%{query}%',)
-> ```
-
-</details>
-
-<details>
-<summary><strong>Task 3.3: Konfigurationssicherheit verbessern</strong></summary>
-
-### Aufgabe
-
-⚠️ **Problem**: `config.py` enthält sensible Daten, die nicht im Code stehen sollten.
-
-**Fragen Sie Ihren AI-Assistenten**:
-- "Analysiere config.py - welche Daten sollten nicht im Code stehen?"
-- "Wie verschiebe ich sensible Konfigurationsdaten in Umgebungsvariablen?"
-- "Zeige mir, wie ich python-dotenv verwende"
-
-### Implementierung
-
-> [!IMPORTANT]
-> Erstellen Sie eine `.env` Datei und fügen Sie sie zu `.gitignore` hinzu!
-
-1. Erstellen Sie eine `.env` Datei
-2. Verschieben Sie Secrets aus `config.py` in die `.env` Datei
-3. Laden Sie Secrets aus Umgebungsvariablen
-
-### Überprüfung
-
-```bash
-grep -r "hardcoded-secret" .  # Sollte nichts finden
-```
-
-</details>
-
----
-
-## Phase 4: Performance-Optimierung (45 Minuten)
-
-> [!NOTE]
-> **Lernziel**: Identifizieren und beheben Sie Performance-Engpässe mit AI-Unterstützung (Q Developer, Kiro, Copilot).
-
-
-<details>
-<summary><strong>Task 2.1: N+1 Query Problem identifizieren</strong></summary>
-
-### Aufgabe
-
-**Problem**: Das Dashboard lädt Sensordaten ineffizient.
-
-**Fragen Sie Ihren AI-Assistenten**:
-- "Analysiere `repositories/sensor_data.py` auf N+1 Query Probleme"
-- "Wie kann ich die `get_latest_readings()` Methode optimieren?"
-
-### Analyse
-
-1. Öffnen Sie `repositories/sensor_data.py`
-2. Untersuchen Sie die `get_latest_readings()` Methode
-3. Zählen Sie, wie viele Datenbankabfragen für 10 Anlagen ausgeführt werden
-
-### Erwartetes Ergebnis
-
-Sie sollten feststellen: Bei 10 Anlagen werden 11 Queries ausgeführt (1 + 10).
-
-> [!IMPORTANT]
-> Siehe `PERFORMANCE_ISSUES.md` für detaillierte Erklärungen.
-
-</details>
-
-<details>
-<summary><strong>Task 2.2: N+1 Query Problem beheben</strong></summary>
-
-### Aufgabe
-
-**Fragen Sie Ihren AI-Assistenten**:
-- "Schreibe die Methode um, um alle Daten mit einem JOIN zu laden"
-- "Zeige mir, wie ich Window Functions in SQLite verwende"
-
-### Implementierung
-
-1. Ersetzen Sie die Schleife durch eine einzelne SQL-Abfrage mit JOIN
-2. Verwenden Sie `ROW_NUMBER()` Window Function für die neuesten Messwerte
-3. Testen Sie die Performance-Verbesserung
-
-### Überprüfung
-
-```python
-# Messen Sie die Ausführungszeit
-import time
-start = time.time()
-readings = sensor_repo.get_latest_readings()
-print(f"Zeit: {time.time() - start:.3f}s")
-```
-
-**Erwartete Verbesserung**: 5-10x schneller!
-
-</details>
-
-<details>
-<summary><strong>Task 2.3: Datenbank-Indizes hinzufügen</strong></summary>
-
-### Aufgabe
-
-**Problem**: Die `sensor_readings` Tabelle hat keine Indizes auf häufig abgefragten Spalten.
-
-**Fragen Sie Ihren AI-Assistenten**:
-- "Welche Indizes sollte ich für die sensor_readings Tabelle erstellen?"
-- "Wie analysiere ich Query-Performance in SQLite?"
-
-### Implementierung
-
-1. Öffnen Sie `schema.sql`
-2. Fügen Sie Indizes für `equipment_id` und `timestamp` hinzu
-3. Erstellen Sie einen zusammengesetzten Index für beide Spalten
-
-### SQL-Befehle
-
-```sql
-CREATE INDEX idx_sensor_readings_equipment ON sensor_readings(equipment_id);
-CREATE INDEX idx_sensor_readings_timestamp ON sensor_readings(timestamp DESC);
-CREATE INDEX idx_sensor_readings_equipment_timestamp ON sensor_readings(equipment_id, timestamp DESC);
-```
-
-### Überprüfung
-
-```sql
-EXPLAIN QUERY PLAN
-SELECT * FROM sensor_readings 
-WHERE equipment_id = 'PUMPE-001' 
-ORDER BY timestamp DESC 
-LIMIT 10;
-```
-
-Sollte jetzt "SEARCH ... USING INDEX" anzeigen statt "SCAN".
-
-</details>
-
-<details>
-<summary><strong>Task 2.4: Ineffiziente Statistik-Berechnung optimieren</strong></summary>
-
-### Aufgabe
-
-**Problem**: `services/sensor_processor.py` berechnet Statistiken in mehreren Durchläufen.
-
-**Fragen Sie Ihren AI-Assistenten**:
-- "Optimiere diese Statistik-Berechnung auf einen einzigen Durchlauf"
-- "Wie berechne ich Min, Max, Durchschnitt und Standardabweichung effizient?"
-
-### Implementierung
-
-1. Öffnen Sie `services/sensor_processor.py`
-2. Finden Sie die `calculate_statistics()` Methode
-3. Kombinieren Sie alle Berechnungen in einer Schleife
-
-### Erwartetes Ergebnis
-
-**Vorher**: 5 Durchläufe über die Daten  
-**Nachher**: 1 Durchlauf über die Daten  
-**Speedup**: 5-6x schneller
-
-</details>
-
----
-
-## Phase 5: Property-Based Testing (45 Minuten)
-
-> [!NOTE]
-> **Lernziel**: Verstehen und erweitern Sie Property-Based Tests mit Hypothesis und AI-Unterstützung (Q Developer, Kiro, Copilot).
-
-<details>
-<summary><strong>Task 3.1: Property-Based Testing verstehen</strong></summary>
+<summary><strong>Task 4.1: Property-Based Testing verstehen</strong></summary>
 
 ### Aufgabe
 
@@ -864,7 +782,7 @@ Sie verstehen:
 </details>
 
 <details>
-<summary><strong>Task 3.2: Neue Property-Tests schreiben</strong></summary>
+<summary><strong>Task 4.2: Neue Property-Tests schreiben</strong></summary>
 
 ### Aufgabe
 
@@ -904,7 +822,7 @@ pytest test_alert_properties.py -v
 </details>
 
 <details>
-<summary><strong>Task 3.3: Round-Trip Property testen</strong></summary>
+<summary><strong>Task 4.3: Round-Trip Property testen</strong></summary>
 
 ### Aufgabe
 
@@ -935,13 +853,263 @@ def test_equipment_roundtrip(equipment):
 
 ---
 
-## Phase 6: Containerisierung (30 Minuten)
+## Phase 5: Performance-Optimierung (45 Minuten)
 
 > [!NOTE]
-> **Lernziel**: Containerisieren Sie die Anwendung für moderne Deployment-Praktiken mit AI-Unterstützung (Q Developer, Kiro, Copilot).
+> **Lernziel**: Identifizieren und beheben Sie Performance-Engpässe mit AI-Unterstützung (Q Developer, Kiro).
 
 <details>
-<summary><strong>Task 4.1: Dockerfile erstellen</strong></summary>
+<summary><strong>Task 5.1: N+1 Query Problem identifizieren</strong></summary>
+
+### Aufgabe
+
+**Problem**: Das Dashboard lädt Sensordaten ineffizient.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Analysiere `repositories/sensor_data.py` auf N+1 Query Probleme"
+- "Wie kann ich die `get_latest_readings()` Methode optimieren?"
+- "Was ist ein N+1 Query Problem und warum ist es problematisch?"
+
+### Analyse
+
+1. Öffnen Sie `repositories/sensor_data.py`
+2. Untersuchen Sie die `get_latest_readings()` Methode
+3. Zählen Sie, wie viele Datenbankabfragen für 10 Anlagen ausgeführt werden
+
+### Was ist das N+1 Query Problem?
+
+Das **N+1 Query Problem** ist ein häufiges Performance-Problem in Datenbankanwendungen:
+
+**Das Problem**:
+- 1 Query lädt eine Liste von N Objekten (z.B. 10 Anlagen)
+- Dann werden N weitere Queries ausgeführt, um zugehörige Daten zu laden (z.B. Sensordaten für jede Anlage)
+- **Gesamt: 1 + N = 11 Queries** für 10 Anlagen
+
+**Warum ist das problematisch?**:
+1. **Netzwerk-Overhead**: Jede Query hat Latenz (z.B. 5ms pro Query = 55ms statt 5ms)
+2. **Datenbank-Last**: 11 separate Queries belasten die Datenbank mehr als 1 Query
+3. **Skalierungsproblem**: Bei 100 Anlagen → 101 Queries, bei 1000 Anlagen → 1001 Queries
+4. **Langsame Seitenladezeiten**: Benutzer warten länger auf Daten
+5. **Ressourcenverschwendung**: Mehr CPU, Speicher und Netzwerkbandbreite werden verbraucht
+
+**Die Lösung**:
+- Verwenden Sie **JOINs** oder **Window Functions**, um alle Daten in einer einzigen Query zu laden
+- Reduziert 11 Queries auf 1 Query → **10x schneller**!
+
+### Erwartetes Ergebnis
+
+Sie sollten feststellen: Bei 10 Anlagen werden 11 Queries ausgeführt (1 + 10).
+
+📄 **Hinweis**: Siehe `PERFORMANCE_ISSUES.md` für detaillierte Erklärungen.
+
+</details>
+
+<details>
+<summary><strong>Task 5.2: N+1 Query Problem beheben</strong></summary>
+
+### Aufgabe
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Schreibe die Methode um, um alle Daten mit einem JOIN zu laden"
+- "Zeige mir, wie ich Window Functions in SQLite verwende"
+
+### Implementierung
+
+1. Ersetzen Sie die Schleife durch eine einzelne SQL-Abfrage mit JOIN
+2. Verwenden Sie `ROW_NUMBER()` Window Function für die neuesten Messwerte
+3. Testen Sie die Performance-Verbesserung
+
+### Überprüfung
+
+```python
+# Messen Sie die Ausführungszeit
+import time
+start = time.time()
+readings = sensor_repo.get_latest_readings()
+print(f"Zeit: {time.time() - start:.3f}s")
+```
+
+**Erwartete Verbesserung**: 5-10x schneller!
+
+</details>
+
+<details>
+<summary><strong>Task 5.3: Datenbank-Indizes hinzufügen</strong></summary>
+
+### Aufgabe
+
+**Problem**: Die `sensor_readings` Tabelle hat keine Indizes auf häufig abgefragten Spalten.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Welche Indizes sollte ich für die sensor_readings Tabelle erstellen?"
+- "Wie analysiere ich Query-Performance in SQLite?"
+
+### Implementierung
+
+1. Öffnen Sie `schema.sql`
+2. Fügen Sie Indizes für `equipment_id` und `timestamp` hinzu
+3. Erstellen Sie einen zusammengesetzten Index für beide Spalten
+
+### SQL-Befehle
+
+```sql
+CREATE INDEX idx_sensor_readings_equipment ON sensor_readings(equipment_id);
+CREATE INDEX idx_sensor_readings_timestamp ON sensor_readings(timestamp DESC);
+CREATE INDEX idx_sensor_readings_equipment_timestamp ON sensor_readings(equipment_id, timestamp DESC);
+```
+
+### Überprüfung
+
+```sql
+EXPLAIN QUERY PLAN
+SELECT * FROM sensor_readings 
+WHERE equipment_id = 'PUMPE-001' 
+ORDER BY timestamp DESC 
+LIMIT 10;
+```
+
+Sollte jetzt "SEARCH ... USING INDEX" anzeigen statt "SCAN".
+
+</details>
+
+<details>
+<summary><strong>Task 5.4: Ineffiziente Statistik-Berechnung optimieren</strong></summary>
+
+### Aufgabe
+
+**Problem**: `services/sensor_processor.py` berechnet Statistiken in mehreren Durchläufen.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Optimiere diese Statistik-Berechnung auf einen einzigen Durchlauf"
+- "Wie berechne ich Min, Max, Durchschnitt und Standardabweichung effizient?"
+
+### Implementierung
+
+1. Öffnen Sie `services/sensor_processor.py`
+2. Finden Sie die `calculate_statistics()` Methode
+3. Kombinieren Sie alle Berechnungen in einer Schleife
+
+### Erwartetes Ergebnis
+
+**Vorher**: 5 Durchläufe über die Daten  
+**Nachher**: 1 Durchlauf über die Daten  
+**Speedup**: 5-6x schneller
+
+</details>
+
+---
+
+## Phase 6: Code-Review und Sicherheitsanalyse (30 Minuten)
+
+> [!NOTE]
+> **Lernziel**: Nutzen Sie AI-Tools (Q Developer, Kiro), um Sicherheitslücken in bestehendem Code zu identifizieren.
+
+<details>
+<summary><strong>Task 6.1: Codebase-Analyse</strong></summary>
+
+### Aufgabe
+
+Nutzen Sie Ihren AI-Assistenten für eine erste Sicherheitsanalyse der Codebasis.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Analysiere die Datei `repositories/equipment.py` auf Sicherheitsprobleme"
+- "Überprüfe `config.py` auf Sicherheitsrisiken"
+- "Untersuche `routes/api.py` auf fehlende Sicherheitsmaßnahmen"
+
+**Ihre Aufgabe**: Lassen Sie den AI-Assistenten die Dateien analysieren und dokumentieren Sie die gefundenen Probleme.
+
+<details>
+<summary>💡 <strong>Hinweis: Erwartete Sicherheitsprobleme</strong> (klicken zum Anzeigen)</summary>
+
+<br>
+
+Der AI-Assistent sollte mindestens diese Probleme identifizieren:
+1. **SQL-Injection** in der `search()` Methode
+2. **Hardcodierte Secrets** in der Konfiguration
+3. **Fehlende Authentifizierung** bei sensiblen API-Endpunkten
+
+📄 **Detaillierte Hinweise**: Öffnen Sie `SECURITY_ISSUES.md` für ausführliche Erklärungen zu den Schwachstellen.
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Task 6.2: Sicherheitsproblem in Equipment-Repository beheben</strong></summary>
+
+### Aufgabe
+
+⚠️ **Problem**: Die `search()` Methode in `repositories/equipment.py` hat eine Sicherheitslücke.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Wie behebe ich die Sicherheitslücke in der search() Methode?"
+- "Zeige mir, wie ich parametrisierte Queries verwende"
+- "Was ist das Problem mit String-Konkatenation in SQL-Queries?"
+
+### Implementierung
+
+1. Öffnen Sie `repositories/equipment.py`
+2. Finden Sie die `search()` Methode
+3. Ersetzen Sie String-Konkatenation durch parametrisierte Queries
+4. Testen Sie die Änderung
+
+### Überprüfung
+
+```bash
+# Dieser Test sollte weiterhin funktionieren
+pytest test_equipment_properties.py -v
+```
+
+⚠️ **Vorher** (unsicher):
+```python
+sql = f"SELECT * FROM equipment WHERE name LIKE '%{query}%'"
+```
+
+✅ **Nachher** (sicher):
+```python
+sql = "SELECT * FROM equipment WHERE name LIKE ?"
+params = (f'%{query}%',)
+```
+
+</details>
+
+<details>
+<summary><strong>Task 6.3: Konfigurationssicherheit verbessern</strong></summary>
+
+### Aufgabe
+
+⚠️ **Problem**: `config.py` enthält sensible Daten, die nicht im Code stehen sollten.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Analysiere config.py - welche Daten sollten nicht im Code stehen?"
+- "Wie verschiebe ich sensible Konfigurationsdaten in Umgebungsvariablen?"
+- "Zeige mir, wie ich python-dotenv verwende"
+
+### Implementierung
+
+🎯 **Wichtig**: Erstellen Sie eine `.env` Datei und fügen Sie sie zu `.gitignore` hinzu!
+
+1. Erstellen Sie eine `.env` Datei
+2. Verschieben Sie Secrets aus `config.py` in die `.env` Datei
+3. Laden Sie Secrets aus Umgebungsvariablen
+
+### Überprüfung
+
+```bash
+grep -r "hardcoded-secret" .  # Sollte nichts finden
+```
+
+</details>
+
+---
+
+## Phase 7: Containerisierung (30 Minuten)
+
+> [!NOTE]
+> **Lernziel**: Containerisieren Sie die Anwendung für moderne Deployment-Praktiken mit AI-Unterstützung (Q Developer, Kiro).
+
+<details>
+<summary><strong>Task 7.1: Dockerfile erstellen</strong></summary>
 
 ### Aufgabe
 
@@ -978,7 +1146,7 @@ docker run -p 5000:5000 industrial-monitoring
 </details>
 
 <details>
-<summary><strong>Task 4.2: Docker Compose konfigurieren</strong></summary>
+<summary><strong>Task 7.2: Docker Compose konfigurieren</strong></summary>
 
 ### Aufgabe
 
@@ -1014,7 +1182,7 @@ docker-compose up
 </details>
 
 <details>
-<summary><strong>Task 4.3: .dockerignore erstellen</strong></summary>
+<summary><strong>Task 7.3: .dockerignore erstellen</strong></summary>
 
 ### Aufgabe
 
