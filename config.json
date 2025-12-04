@@ -1,0 +1,27 @@
+{
+  "database": {
+    "path": "industrial_monitoring.db"
+  },
+  "server": {
+    "host": "0.0.0.0",
+    "port": 5000,
+    "debug": true
+  },
+  "thresholds": {
+    "temperature": {
+      "min": 0,
+      "max": 100,
+      "unit": "celsius"
+    },
+    "pressure": {
+      "min": 0,
+      "max": 150,
+      "unit": "psi"
+    },
+    "vibration": {
+      "min": 0,
+      "max": 10,
+      "unit": "mm/s"
+    }
+  }
+}

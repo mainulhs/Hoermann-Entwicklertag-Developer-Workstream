@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Anmelden - Industrielles Anlagenüberwachungssystem{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 4rem auto;">
+    <h1 style="text-align: center; margin-bottom: 2rem;">Anmelden</h1>
+    
+    {% if error %}
+    <div class="alert alert-error">
+        <strong>Fehler:</strong> {{ error }}
+    </div>
+    {% endif %}
+    
+    {% if success %}
+    <div class="alert alert-success">
+        <strong>Erfolg!</strong> {{ success }}
+    </div>
+    {% endif %}
+    
+    <div class="card">
+        <h2>Anmeldung</h2>
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="username">Benutzername</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    required 
+                    placeholder="Benutzername eingeben"
+                    value="{{ request.form.username or '' }}"
+                    autofocus
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Passwort</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    placeholder="Passwort eingeben"
+                >
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Anmelden
+            </button>
+        </form>
+    </div>
+    
+    <div class="card">
+        <h2>Demo-Zugangsdaten</h2>
+        <p>Für Testzwecke können Sie diese Demo-Zugangsdaten verwenden:</p>
+        <ul style="margin-left: 2rem; margin-top: 1rem;">
+            <li><strong>Benutzername:</strong> admin</li>
+            <li><strong>Passwort:</strong> admin123</li>
+        </ul>
+        <p style="margin-top: 1rem; color: #e74c3c;">
+            <strong>⚠️ Sicherheitshinweis:</strong> Dies ist eine Workshop-Anwendung mit absichtlichen Sicherheitslücken. 
+            Nicht in Produktion verwenden!
+        </p>
+    </div>
+</div>
+{% endblock %}

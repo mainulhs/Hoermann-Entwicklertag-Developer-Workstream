@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Alarme - Industrielles Anlagenüberwachungssystem{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 2rem;">System-Alarme</h1>
+
+{% if success %}
+<div class="alert alert-success">
+    <strong>Erfolg!</strong> {{ success }}
+</div>
+{% endif %}
+
+<!-- Active Alerts -->
+<div class="card">
+    <h2>🚨 Aktive Alarme ({{ active_alerts|length }})</h2>
+    {% if active_alerts %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Anlagen-ID</th>
+                <th>Typ</th>
+                <th>Schweregrad</th>
+                <th>Nachricht</th>
+                <th>Erstellt</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alert in active_alerts %}
+            <tr>
+                <td>{{ alert.id }}</td>
+                <td><strong>{{ alert.equipment_id }}</strong></td>
+                <td>{{ alert.alert_type }}</td>
+                <td>
+                    <span class="badge badge-{{ alert.severity }}">
+                        {{ alert.severity|upper }}
+                    </span>
+                </td>
+                <td>{{ alert.message }}</td>
+                <td>{{ alert.created_at }}</td>
+                <td>
+                    <form action="/alerts/{{ alert.id }}/ack" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-success" style="padding: 0.5rem 1rem;">
+                            Bestätigen
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #27ae60;">✅ Keine aktiven Alarme. Alle Systeme arbeiten normal.</p>
+    {% endif %}
+</div>
+
+<!-- Acknowledged Alerts -->
+<div class="card">
+    <h2>✓ Bestätigte Alarme ({{ acknowledged_alerts|length }})</h2>
+    {% if acknowledged_alerts %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Anlagen-ID</th>
+                <th>Typ</th>
+                <th>Schweregrad</th>
+                <th>Nachricht</th>
+                <th>Erstellt</th>
+                <th>Bestätigt von</th>
+                <th>Bestätigt am</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alert in acknowledged_alerts %}
+            <tr>
+                <td>{{ alert.id }}</td>
+                <td><strong>{{ alert.equipment_id }}</strong></td>
+                <td>{{ alert.alert_type }}</td>
+                <td>
+                    <span class="badge badge-{{ alert.severity }}">
+                        {{ alert.severity|upper }}
+                    </span>
+                </td>
+                <td>{{ alert.message }}</td>
+                <td>{{ alert.created_at }}</td>
+                <td>{{ alert.acknowledged_by or '-' }}</td>
+                <td>{{ alert.acknowledged_at or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Keine bestätigten Alarme.</p>
+    {% endif %}
+</div>
+
+<!-- Alert Statistics -->
+<div class="card">
+    <h2>📊 Alarm-Statistiken</h2>
+    <div class="grid grid-2">
+        <div>
+            <h3 style="margin-bottom: 1rem;">Nach Schweregrad</h3>
+            <table>
+                <tr>
+                    <td><span class="badge badge-critical">KRITISCH</span></td>
+                    <td><strong>{{ severity_counts.kritisch or severity_counts.critical or 0 }}</strong></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-high">HOCH</span></td>
+                    <td><strong>{{ severity_counts.hoch or severity_counts.high or 0 }}</strong></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-medium">MITTEL</span></td>
+                    <td><strong>{{ severity_counts.mittel or severity_counts.medium or 0 }}</strong></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-low">NIEDRIG</span></td>
+                    <td><strong>{{ severity_counts.niedrig or severity_counts.low or 0 }}</strong></td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <h3 style="margin-bottom: 1rem;">Nach Status</h3>
+            <table>
+                <tr>
+                    <td>Aktiv</td>
+                    <td><strong>{{ active_alerts|length }}</strong></td>
+                </tr>
+                <tr>
+                    <td>Bestätigt</td>
+                    <td><strong>{{ acknowledged_alerts|length }}</strong></td>
+                </tr>
+                <tr>
+                    <td>Gesamt</td>
+                    <td><strong>{{ (active_alerts|length) + (acknowledged_alerts|length) }}</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

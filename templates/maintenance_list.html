@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Wartungsaufzeichnungen - Industrielles Anlagenüberwachungssystem{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 2rem;">Wartungsaufzeichnungen</h1>
+
+<!-- Overdue Maintenance -->
+{% if overdue_maintenance %}
+<div class="card">
+    <h2>⚠️ Überfällige Wartungen ({{ overdue_maintenance|length }})</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Anlagen-ID</th>
+                <th>Typ</th>
+                <th>Geplantes Datum</th>
+                <th>Beschreibung</th>
+                <th>Tage überfällig</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in overdue_maintenance %}
+            <tr style="background-color: #fff3cd;">
+                <td><strong>{{ record.equipment_id }}</strong></td>
+                <td>{{ record.maintenance_type }}</td>
+                <td>{{ record.scheduled_date }}</td>
+                <td>{{ record.description or '-' }}</td>
+                <td>
+                    <span class="badge badge-critical">
+                        {{ record.days_overdue }} Tage
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<!-- All Maintenance Records -->
+<div class="card">
+    <h2>Alle Wartungsaufzeichnungen ({{ maintenance_records|length }})</h2>
+    {% if maintenance_records %}
+    <table>
+        <thead>
+            <tr>
+                <th>Anlagen-ID</th>
+                <th>Typ</th>
+                <th>Geplantes Datum</th>
+                <th>Abschlussdatum</th>
+                <th>Status</th>
+                <th>Beschreibung</th>
+                <th>Techniker-Notizen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in maintenance_records %}
+            <tr>
+                <td><strong>{{ record.equipment_id }}</strong></td>
+                <td>{{ record.maintenance_type }}</td>
+                <td>{{ record.scheduled_date }}</td>
+                <td>{{ record.completion_date or '-' }}</td>
+                <td>
+                    {% if record.status == 'completed' %}
+                        <span class="badge badge-active">ABGESCHLOSSEN</span>
+                    {% elif record.status == 'scheduled' %}
+                        <span class="badge badge-medium">GEPLANT</span>
+                    {% elif record.status == 'in_progress' %}
+                        <span class="badge badge-high">IN BEARBEITUNG</span>
+                    {% else %}
+                        <span class="badge badge-low">{{ record.status|upper }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ record.description or '-' }}</td>
+                <td>{{ record.technician_notes or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Keine Wartungsaufzeichnungen gefunden.</p>
+    {% endif %}
+</div>
+
+<!-- Filter Options -->
+<div class="card">
+    <h2>Wartungsaufzeichnungen filtern</h2>
+    <form method="GET" action="/maintenance">
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label for="equipment_id">Anlagen-ID</label>
+                <input 
+                    type="text" 
+                    id="equipment_id" 
+                    name="equipment_id" 
+                    placeholder="Nach Anlagen-ID filtern"
+                    value="{{ request.args.equipment_id or '' }}"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="">Alle Status</option>
+                    <option value="scheduled" {% if request.args.status == 'scheduled' %}selected{% endif %}>Geplant</option>
+                    <option value="in_progress" {% if request.args.status == 'in_progress' %}selected{% endif %}>In Bearbeitung</option>
+                    <option value="completed" {% if request.args.status == 'completed' %}selected{% endif %}>Abgeschlossen</option>
+                </select>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">Filter anwenden</button>
+            <a href="/maintenance" class="btn" style="background-color: #95a5a6; color: white;">Filter zurücksetzen</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

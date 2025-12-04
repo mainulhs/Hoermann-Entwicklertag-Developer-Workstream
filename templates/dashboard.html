@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Industrielles Anlagenüberwachungssystem{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 2rem;">Dashboard</h1>
+
+<!-- Sensor Gauges Section -->
+{% if equipment %}
+<div class="card">
+    <h2>📊 Aktuelle Sensorwerte</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+        {% for item in equipment %}
+            {% if item.latest_reading %}
+            <div style="text-align: center;">
+                <canvas id="gauge-{{ loop.index }}" width="200" height="120"></canvas>
+                <h4 style="margin-top: 0.5rem; margin-bottom: 0.25rem;">{{ item.name }}</h4>
+                <p style="color: #666; font-size: 0.9rem; margin: 0;">{{ item.location }}</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Active Alerts Section -->
+{% if alerts %}
+<div class="card">
+    <h2>🚨 Aktive Alarme ({{ alerts|length }})</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Anlage</th>
+                <th>Typ</th>
+                <th>Schweregrad</th>
+                <th>Nachricht</th>
+                <th>Zeit</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alert in alerts %}
+            <tr>
+                <td>{{ alert.equipment_id }}</td>
+                <td>{{ alert.alert_type }}</td>
+                <td>
+                    <span class="badge badge-{{ alert.severity }}">
+                        {{ alert.severity|upper }}
+                    </span>
+                </td>
+                <td>{{ alert.message }}</td>
+                <td>{{ alert.created_at }}</td>
+                <td>
+                    <form action="/alerts/{{ alert.id }}/ack" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-success" style="padding: 0.5rem 1rem;">
+                            Bestätigen
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <h2>✅ Aktive Alarme</h2>
+    <p style="color: #27ae60;">Keine aktiven Alarme. Alle Systeme arbeiten normal.</p>
+</div>
+{% endif %}
+
+<!-- Equipment List Section -->
+<div class="card">
+    <h2>Anlagen ({{ equipment|length }})</h2>
+    {% if equipment %}
+    <table>
+        <thead>
+            <tr>
+                <th>Anlagen-ID</th>
+                <th>Name</th>
+                <th>Typ</th>
+                <th>Standort</th>
+                <th>Status</th>
+                <th>Letzte Messung</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in equipment %}
+            <tr>
+                <td><strong>{{ item.equipment_id }}</strong></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.location }}</td>
+                <td>
+                    <span class="badge badge-{{ item.status }}">
+                        {{ item.status|upper }}
+                    </span>
+                </td>
+                <td>
+                    {% if item.latest_reading %}
+                        {{ item.latest_reading.sensor_type }}: 
+                        {{ item.latest_reading.value }} 
+                        {{ item.latest_reading.unit or '' }}
+                        <br>
+                        <small style="color: #666;">{{ item.latest_reading.timestamp }}</small>
+                    {% else %}
+                        <span style="color: #95a5a6;">Keine Messwerte</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/equipment/{{ item.equipment_id }}" class="btn btn-primary" style="padding: 0.5rem 1rem;">
+                        Details anzeigen
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Noch keine Anlagen registriert. <a href="/equipment/new">Erste Anlage hinzufügen</a>.</p>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// Sensor type thresholds and max values
+const sensorConfig = {
+    'temperature': { max: 100, unit: '°C', warning: 80, critical: 90, color: '#e74c3c' },
+    'pressure': { max: 10, unit: 'bar', warning: 8, critical: 9, color: '#3498db' },
+    'vibration': { max: 5, unit: 'mm/s', warning: 4, critical: 4.5, color: '#9b59b6' },
+    'flow_rate': { max: 500, unit: 'L/min', warning: 400, critical: 450, color: '#1abc9c' },
+    'current': { max: 50, unit: 'A', warning: 40, critical: 45, color: '#f39c12' },
+    'rpm': { max: 3000, unit: 'rpm', warning: 2500, critical: 2800, color: '#34495e' },
+    'speed': { max: 5, unit: 'm/s', warning: 4, critical: 4.5, color: '#16a085' },
+    'load': { max: 100, unit: '%', warning: 80, critical: 90, color: '#e67e22' },
+    'humidity': { max: 100, unit: '%', warning: 75, critical: 85, color: '#3498db' },
+    'power': { max: 100, unit: 'kW', warning: 80, critical: 90, color: '#f39c12' },
+    'position': { max: 100, unit: '%', warning: 90, critical: 95, color: '#95a5a6' },
+    'level': { max: 100, unit: '%', warning: 90, critical: 95, color: '#1abc9c' }
+};
+
+// Equipment data from Flask
+const equipmentData = [
+    {% for item in equipment %}
+        {% if item.latest_reading %}
+        {
+            name: "{{ item.name }}",
+            sensorType: "{{ item.latest_reading.sensor_type }}",
+            value: {{ item.latest_reading.value }},
+            unit: "{{ item.latest_reading.unit or '' }}"
+        },
+        {% endif %}
+    {% endfor %}
+];
+
+// Create gauge chart
+function createGaugeChart(canvasId, data, index) {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+    
+    const config = sensorConfig[data.sensorType] || { max: 100, unit: '', warning: 80, critical: 90, color: '#95a5a6' };
+    const percentage = (data.value / config.max) * 100;
+    
+    // Determine color based on thresholds
+    let gaugeColor = '#27ae60'; // green (normal)
+    if (data.value >= config.critical) {
+        gaugeColor = '#e74c3c'; // red (critical)
+    } else if (data.value >= config.warning) {
+        gaugeColor = '#f39c12'; // orange (warning)
+    }
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [data.value, config.max - data.value],
+                backgroundColor: [gaugeColor, '#ecf0f1'],
+                borderWidth: 0,
+                circumference: 180,
+                rotation: 270
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            },
+            cutout: '75%'
+        },
+        plugins: [{
+            id: 'gaugeText',
+            afterDraw: (chart) => {
+                const ctx = chart.ctx;
+                const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+                const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2 + 10;
+                
+                // Draw value
+                ctx.save();
+                ctx.font = 'bold 24px sans-serif';
+                ctx.fillStyle = gaugeColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(data.value.toFixed(1), centerX, centerY - 10);
+                
+                // Draw unit and sensor type
+                ctx.font = '12px sans-serif';
+                ctx.fillStyle = '#666';
+                ctx.fillText(config.unit, centerX, centerY + 10);
+                ctx.fillText(data.sensorType.replace('_', ' '), centerX, centerY + 25);
+                
+                ctx.restore();
+            }
+        }]
+    });
+}
+
+// Initialize all gauges
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing gauges...', equipmentData);
+    equipmentData.forEach((data, index) => {
+        createGaugeChart(`gauge-${index + 1}`, data, index);
+    });
+});
+</script>
+
+{% endblock %}

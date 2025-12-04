@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Messwert erfassen - Industrielles Anlagenüberwachungssystem{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 2rem;">Messwert erfassen</h1>
+
+{% if error %}
+<div class="alert alert-error">
+    <strong>Fehler:</strong> {{ error }}
+</div>
+{% endif %}
+
+{% if success %}
+<div class="alert alert-success">
+    <strong>Erfolg!</strong> Messwert erfolgreich erfasst.
+    {% if alert_generated %}
+    <br><strong>⚠️ Alarm generiert:</strong> {{ alert_message }}
+    {% endif %}
+    <br><a href="/">Zurück zum Dashboard</a>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>Messwert-Informationen</h2>
+    <form method="POST" action="/sensors/record">
+        <div class="form-group">
+            <label for="equipment_id">Anlagen-ID *</label>
+            <input 
+                type="text" 
+                id="equipment_id" 
+                name="equipment_id" 
+                required 
+                placeholder="z.B. PUMPE-001"
+                value="{{ request.form.equipment_id or '' }}"
+                list="equipment-list"
+            >
+            <datalist id="equipment-list">
+                {% for item in equipment %}
+                <option value="{{ item.equipment_id }}">{{ item.name }}</option>
+                {% endfor %}
+            </datalist>
+            <small style="color: #666;">Anlagen-ID auswählen oder eingeben</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="sensor_type">Sensortyp *</label>
+            <select id="sensor_type" name="sensor_type" required>
+                <option value="">Sensortyp auswählen...</option>
+                <option value="temperature" {% if request.form.sensor_type == 'temperature' %}selected{% endif %}>Temperatur</option>
+                <option value="pressure" {% if request.form.sensor_type == 'pressure' %}selected{% endif %}>Druck</option>
+                <option value="vibration" {% if request.form.sensor_type == 'vibration' %}selected{% endif %}>Vibration</option>
+                <option value="flow_rate" {% if request.form.sensor_type == 'flow_rate' %}selected{% endif %}>Durchflussrate</option>
+                <option value="humidity" {% if request.form.sensor_type == 'humidity' %}selected{% endif %}>Feuchtigkeit</option>
+                <option value="power" {% if request.form.sensor_type == 'power' %}selected{% endif %}>Leistung</option>
+                <option value="speed" {% if request.form.sensor_type == 'speed' %}selected{% endif %}>Geschwindigkeit</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="value">Wert *</label>
+            <input 
+                type="number" 
+                id="value" 
+                name="value" 
+                step="0.01" 
+                required 
+                placeholder="z.B. 75.5"
+                value="{{ request.form.value or '' }}"
+            >
+        </div>
+        
+        <div class="form-group">
+            <label for="unit">Einheit</label>
+            <input 
+                type="text" 
+                id="unit" 
+                name="unit" 
+                placeholder="z.B. °C, bar, rpm"
+                value="{{ request.form.unit or '' }}"
+            >
+            <small style="color: #666;">Optional: Maßeinheit angeben</small>
+        </div>
+        
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">Messwert erfassen</button>
+            <a href="/" class="btn" style="background-color: #95a5a6; color: white;">Abbrechen</a>
+        </div>
+    </form>
+</div>
+
+<!-- Quick Reference: Threshold Values -->
+<div class="card">
+    <h2>ℹ️ Schwellwert-Referenz</h2>
+    <p>Alarme werden automatisch generiert, wenn Messwerte diese Schwellwerte überschreiten:</p>
+    <ul style="margin-left: 2rem; margin-top: 1rem;">
+        <li><strong>Temperatur:</strong> > 100°C</li>
+        <li><strong>Druck:</strong> > 10 bar</li>
+        <li><strong>Vibration:</strong> > 5 mm/s</li>
+        <li><strong>Durchflussrate:</strong> > 500 L/min</li>
+    </ul>
+</div>
+{% endblock %}

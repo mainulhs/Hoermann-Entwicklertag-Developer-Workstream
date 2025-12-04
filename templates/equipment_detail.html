@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}{{ equipment.name }} - Industrielles Anlagenüberwachungssystem{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>{{ equipment.name }}</h1>
+    <a href="/" class="btn btn-primary">← Zurück zum Dashboard</a>
+</div>
+
+<!-- Equipment Details -->
+<div class="card">
+    <h2>Anlagendetails</h2>
+    <table>
+        <tr>
+            <th style="width: 200px;">Anlagen-ID</th>
+            <td><strong>{{ equipment.equipment_id }}</strong></td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ equipment.name }}</td>
+        </tr>
+        <tr>
+            <th>Typ</th>
+            <td>{{ equipment.type }}</td>
+        </tr>
+        <tr>
+            <th>Standort</th>
+            <td>{{ equipment.location }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>
+                <span class="badge badge-{{ equipment.status }}">
+                    {{ equipment.status|upper }}
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>Erstellt</th>
+            <td>{{ equipment.created_at }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Recent Sensor Readings -->
+<div class="card">
+    <h2>Aktuelle Messwerte</h2>
+    {% if sensor_readings %}
+    <table>
+        <thead>
+            <tr>
+                <th>Sensortyp</th>
+                <th>Wert</th>
+                <th>Einheit</th>
+                <th>Zeitstempel</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reading in sensor_readings %}
+            <tr>
+                <td>{{ reading.sensor_type }}</td>
+                <td><strong>{{ reading.value }}</strong></td>
+                <td>{{ reading.unit or '-' }}</td>
+                <td>{{ reading.timestamp }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Noch keine Messwerte erfasst.</p>
+    {% endif %}
+</div>
+
+<!-- Alerts -->
+<div class="card">
+    <h2>Alarme</h2>
+    {% if alerts %}
+    <table>
+        <thead>
+            <tr>
+                <th>Typ</th>
+                <th>Schweregrad</th>
+                <th>Nachricht</th>
+                <th>Status</th>
+                <th>Erstellt</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alert in alerts %}
+            <tr>
+                <td>{{ alert.alert_type }}</td>
+                <td>
+                    <span class="badge badge-{{ alert.severity }}">
+                        {{ alert.severity|upper }}
+                    </span>
+                </td>
+                <td>{{ alert.message }}</td>
+                <td>
+                    <span class="badge {% if alert.status == 'active' %}badge-critical{% else %}badge-low{% endif %}">
+                        {{ alert.status|upper }}
+                    </span>
+                </td>
+                <td>{{ alert.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Keine Alarme für diese Anlage.</p>
+    {% endif %}
+</div>
+
+<!-- Maintenance History -->
+<div class="card">
+    <h2>Wartungsverlauf</h2>
+    {% if maintenance_records %}
+    <table>
+        <thead>
+            <tr>
+                <th>Typ</th>
+                <th>Geplantes Datum</th>
+                <th>Abschlussdatum</th>
+                <th>Status</th>
+                <th>Beschreibung</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in maintenance_records %}
+            <tr>
+                <td>{{ record.maintenance_type }}</td>
+                <td>{{ record.scheduled_date }}</td>
+                <td>{{ record.completion_date or '-' }}</td>
+                <td>
+                    <span class="badge {% if record.status == 'completed' %}badge-active{% else %}badge-medium{% endif %}">
+                        {{ record.status|upper }}
+                    </span>
+                </td>
+                <td>{{ record.description or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Keine Wartungsaufzeichnungen für diese Anlage.</p>
+    {% endif %}
+</div>
+{% endblock %}
