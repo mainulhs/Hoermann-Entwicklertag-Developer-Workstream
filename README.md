@@ -182,7 +182,8 @@ pip list    # Sollte Flask, Hypothesis, pytest zeigen
 pip3 list   # Alternative, falls pip nicht funktioniert
 ```
 
-**💡 Hinweis**: Auf Windows-Systemen funktioniert meist `python` und `pip`. Auf manchen Systemen (Mac/Linux) müssen Sie `python3` und `pip3` verwenden.
+> [!TIP]
+> Auf Windows-Systemen funktioniert meist `python` und `pip`. Auf manchen Systemen (Mac/Linux) müssen Sie `python3` und `pip3` verwenden.
 
 </details>
 
@@ -210,7 +211,8 @@ pip3 list   # Alternative, falls pip nicht funktioniert
 - Aktive Alarme werden angezeigt
 - Navigation funktioniert
 
-**💡 Tipp**: Lassen Sie die Anwendung im Hintergrund laufen während Sie am Code arbeiten.
+> [!TIP]
+> Lassen Sie die Anwendung im Hintergrund laufen während Sie am Code arbeiten.
 
 </details>
 
@@ -229,7 +231,8 @@ pytest -v
 
 Alle Tests sollten erfolgreich durchlaufen (grün).
 
-**💡 Hinweis**: Diese Tests verwenden Property-Based Testing mit Hypothesis - eine moderne Testmethode, die automatisch viele Testfälle generiert.
+> [!TIP]
+> Diese Tests verwenden Property-Based Testing mit Hypothesis - eine moderne Testmethode, die automatisch viele Testfälle generiert.
 
 </details>
 
@@ -237,9 +240,8 @@ Alle Tests sollten erfolgreich durchlaufen (grün).
 
 ## Phase 1: Warm-up - System verstehen mit AI (15 Minuten)
 
-### Lernziel
-
-Machen Sie sich mit der Anwendung vertraut und lernen Sie, wie AI-Assistenten Ihnen helfen können, Code schnell zu verstehen.
+> [!NOTE]
+> **Lernziel**: Machen Sie sich mit der Anwendung vertraut und lernen Sie, wie AI-Assistenten Ihnen helfen können, Code schnell zu verstehen.
 
 <details>
 <summary><strong>Task 1.1: Anwendung erkunden</strong></summary>
@@ -309,7 +311,8 @@ Sie verstehen:
 - Wie die verschiedenen Layer (Routes → Services → Repositories → Database) zusammenarbeiten
 - Welche Funktionalität jede Seite bietet
 
-**💡 Tipp**: Nutzen Sie AI nicht nur zum Code schreiben, sondern auch zum Code verstehen! Das spart Zeit und hilft beim Onboarding.
+> [!TIP]
+> Nutzen Sie AI nicht nur zum Code schreiben, sondern auch zum Code verstehen! Das spart Zeit und hilft beim Onboarding.
 
 </details>
 
@@ -340,11 +343,264 @@ Sie wissen, wo Sie welchen Code finden:
 
 ---
 
-## Phase 2: Code-Review und Sicherheitsanalyse (30 Minuten)
+## Phase 2: Feature-Entwicklung - Equipment Management erweitern (45 Minuten)
 
-### Lernziel
+> [!NOTE]
+> **Lernziel**: Nutzen Sie AI-Assistenten, um eine neue Funktion zu entwickeln und in die bestehende Anwendung zu integrieren.
 
-Nutzen Sie AI-Tools, um Sicherheitslücken in bestehendem Code zu identifizieren.
+<details>
+<summary><strong>Task 2.1: Fehlende Funktionalität identifizieren</strong></summary>
+
+### Aufgabe
+
+Analysieren Sie die bestehende Anwendung und identifizieren Sie fehlende Equipment-Management-Funktionen.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Öffne `services/equipment_manager.py` - Welche Methoden sind implementiert?"
+- "Öffne `routes/web.py` - Welche Equipment-Routen existieren bereits?"
+- "Vergleiche die beiden Dateien - welche Funktionen fehlen in der Web-UI?"
+
+### Erwartetes Ergebnis
+
+Sie sollten feststellen:
+- ✅ `equipment_manager.py` hat `update_equipment()` und `delete_equipment()` Methoden
+- ✅ Es gibt bereits eine Equipment-Detail-Seite (`/equipment/<id>`)
+- ❌ Es gibt **keine** Route zum Bearbeiten von Equipment
+- ❌ Es gibt **keine** Route zum Löschen von Equipment
+- ❌ Es gibt **keine** Template-Seite für Equipment-Bearbeitung
+
+> [!IMPORTANT]
+> Ihre Aufgabe: Implementieren Sie die fehlenden Edit- und Delete-Funktionen!
+
+</details>
+
+<details>
+<summary><strong>Task 2.2: Equipment-Edit-Route implementieren</strong></summary>
+
+### Aufgabe
+
+Erstellen Sie eine neue Route in `routes/web.py` zum Bearbeiten von Equipment.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Erstelle eine Route `/equipment/<equipment_id>/edit` mit GET und POST Methoden"
+- "Die GET-Methode soll ein Formular mit den aktuellen Equipment-Daten anzeigen"
+- "Die POST-Methode soll die `update_equipment()` Methode vom EquipmentManager aufrufen"
+- "Nach erfolgreichem Update soll zur Equipment-Detail-Seite weitergeleitet werden"
+
+### Implementierung
+
+1. Öffnen Sie `routes/web.py`
+2. Fügen Sie die neue Route nach der `equipment_detail()` Funktion hinzu
+3. Verwenden Sie `equipment_manager.update_equipment()` für die Aktualisierung
+4. Behandeln Sie Fehler und zeigen Sie Erfolgsmeldungen an
+
+### Beispiel-Struktur
+
+```python
+@web_bp.route('/equipment/<equipment_id>/edit', methods=['GET', 'POST'])
+def equipment_edit(equipment_id: str):
+    """
+    Equipment bearbeiten
+    
+    GET /equipment/<id>/edit - Zeigt Bearbeitungsformular
+    POST /equipment/<id>/edit - Verarbeitet Aktualisierung
+    """
+    if request.method == 'POST':
+        # TODO: Form-Daten holen
+        # TODO: equipment_manager.update_equipment() aufrufen
+        # TODO: Bei Erfolg zu equipment_detail weiterleiten
+        # TODO: Bei Fehler Fehlermeldung anzeigen
+        pass
+    
+    # GET: Aktuelles Equipment laden und Formular anzeigen
+    # TODO: equipment_manager.get_equipment_status() aufrufen
+    # TODO: Template mit Equipment-Daten rendern
+    pass
+```
+
+### Überprüfung
+
+Testen Sie die Route manuell:
+1. Starten Sie die Anwendung
+2. Navigieren Sie zu einem Equipment (z.B. http://localhost:5000/equipment/PUMPE-001)
+3. Fügen Sie `/edit` zur URL hinzu
+4. Ändern Sie Daten und speichern Sie
+
+</details>
+
+<details>
+<summary><strong>Task 2.3: Equipment-Edit-Template erstellen</strong></summary>
+
+### Aufgabe
+
+Erstellen Sie ein HTML-Template für die Equipment-Bearbeitung.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Erstelle ein Template `templates/equipment_edit.html` basierend auf `equipment_form.html`"
+- "Das Formular soll die aktuellen Equipment-Werte vorausfüllen"
+- "Füge einen 'Abbrechen'-Button hinzu, der zurück zur Detail-Seite führt"
+
+### Implementierung
+
+1. Erstellen Sie `templates/equipment_edit.html`
+2. Kopieren Sie die Struktur von `equipment_form.html`
+3. Ändern Sie das Formular:
+   - Equipment-ID sollte **nicht editierbar** sein (readonly oder hidden)
+   - Alle anderen Felder sollten mit aktuellen Werten vorausgefüllt sein
+   - Formular-Action sollte zur Edit-Route zeigen
+4. Fügen Sie Buttons hinzu:
+   - "Speichern" (submit)
+   - "Abbrechen" (Link zurück zur Detail-Seite)
+
+### Beispiel-Formular
+
+```html
+<form method="POST" action="{{ url_for('web.equipment_edit', equipment_id=equipment.equipment_id) }}">
+    <input type="hidden" name="equipment_id" value="{{ equipment.equipment_id }}">
+    
+    <label>Name:</label>
+    <input type="text" name="name" value="{{ equipment.name }}" required>
+    
+    <label>Typ:</label>
+    <select name="type" required>
+        <option value="pump" {% if equipment.type == 'pump' %}selected{% endif %}>Pumpe</option>
+        <!-- weitere Optionen -->
+    </select>
+    
+    <!-- weitere Felder -->
+    
+    <button type="submit">Speichern</button>
+    <a href="{{ url_for('web.equipment_detail', equipment_id=equipment.equipment_id) }}">Abbrechen</a>
+</form>
+```
+
+</details>
+
+<details>
+<summary><strong>Task 2.4: Equipment-Delete-Route implementieren</strong></summary>
+
+### Aufgabe
+
+Erstellen Sie eine Route zum Löschen von Equipment.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Erstelle eine Route `/equipment/<equipment_id>/delete` mit POST Methode"
+- "Die Route soll `delete_equipment()` vom EquipmentManager aufrufen"
+- "Nach erfolgreichem Löschen soll zum Dashboard weitergeleitet werden"
+- "Füge eine Sicherheitsabfrage hinzu, um versehentliches Löschen zu verhindern"
+
+### Implementierung
+
+1. Öffnen Sie `routes/web.py`
+2. Fügen Sie die Delete-Route hinzu
+3. Verwenden Sie `equipment_manager.delete_equipment()`
+4. Leiten Sie nach erfolgreichem Löschen zum Dashboard weiter
+
+### Beispiel-Struktur
+
+```python
+@web_bp.route('/equipment/<equipment_id>/delete', methods=['POST'])
+def equipment_delete(equipment_id: str):
+    """
+    Equipment löschen
+    
+    POST /equipment/<id>/delete
+    """
+    try:
+        # TODO: equipment_manager.delete_equipment() aufrufen
+        # TODO: Bei Erfolg zum Dashboard weiterleiten
+        # TODO: Bei Fehler Fehlermeldung anzeigen
+        pass
+    except Exception as e:
+        # TODO: Fehlerbehandlung
+        pass
+```
+
+> [!CAUTION]
+> Löschen ist eine destruktive Operation! Stellen Sie sicher, dass Benutzer bestätigen müssen, bevor Equipment gelöscht wird.
+
+</details>
+
+<details>
+<summary><strong>Task 2.5: UI-Buttons zur Equipment-Detail-Seite hinzufügen</strong></summary>
+
+### Aufgabe
+
+Fügen Sie "Bearbeiten" und "Löschen" Buttons zur Equipment-Detail-Seite hinzu.
+
+**Fragen Sie Ihren AI-Assistenten**:
+- "Öffne `templates/equipment_detail.html`"
+- "Füge einen 'Bearbeiten'-Button hinzu, der zur Edit-Route führt"
+- "Füge einen 'Löschen'-Button mit JavaScript-Bestätigung hinzu"
+
+### Implementierung
+
+1. Öffnen Sie `templates/equipment_detail.html`
+2. Finden Sie einen geeigneten Platz für die Buttons (z.B. neben dem Equipment-Namen)
+3. Fügen Sie die Buttons hinzu:
+
+```html
+<div class="equipment-actions">
+    <a href="{{ url_for('web.equipment_edit', equipment_id=equipment.equipment_id) }}" 
+       class="btn btn-primary">
+        Bearbeiten
+    </a>
+    
+    <form method="POST" 
+          action="{{ url_for('web.equipment_delete', equipment_id=equipment.equipment_id) }}"
+          style="display: inline;"
+          onsubmit="return confirm('Möchten Sie dieses Equipment wirklich löschen?');">
+        <button type="submit" class="btn btn-danger">Löschen</button>
+    </form>
+</div>
+```
+
+### Überprüfung
+
+1. Öffnen Sie eine Equipment-Detail-Seite
+2. Überprüfen Sie, dass beide Buttons sichtbar sind
+3. Testen Sie den "Bearbeiten"-Button
+4. Testen Sie den "Löschen"-Button (mit Bestätigung)
+
+</details>
+
+<details>
+<summary><strong>Task 2.6: End-to-End Test durchführen</strong></summary>
+
+### Aufgabe
+
+Testen Sie den kompletten Equipment-Management-Workflow.
+
+**Test-Szenario**:
+1. Öffnen Sie das Dashboard
+2. Wählen Sie ein Equipment aus
+3. Klicken Sie auf "Bearbeiten"
+4. Ändern Sie den Namen und Standort
+5. Speichern Sie die Änderungen
+6. Überprüfen Sie, dass die Änderungen auf der Detail-Seite sichtbar sind
+7. Klicken Sie auf "Löschen"
+8. Bestätigen Sie die Löschung
+9. Überprüfen Sie, dass das Equipment nicht mehr im Dashboard erscheint
+
+### Erwartetes Ergebnis
+
+✅ Equipment kann erfolgreich bearbeitet werden  
+✅ Änderungen werden in der Datenbank gespeichert  
+✅ Equipment kann gelöscht werden  
+✅ Gelöschtes Equipment erscheint nicht mehr in der Liste  
+✅ Fehlermeldungen werden korrekt angezeigt  
+
+> [!TIP]
+> Nutzen Sie die Browser-Entwicklertools (F12), um Netzwerk-Requests und eventuelle JavaScript-Fehler zu überprüfen.
+
+</details>
+
+---
+
+## Phase 3: Code-Review und Sicherheitsanalyse (30 Minuten)
+
+> [!NOTE]
+> **Lernziel**: Nutzen Sie AI-Tools, um Sicherheitslücken in bestehendem Code zu identifizieren.
 
 <details>
 <summary><strong>Task 2.1: Codebase-Analyse</strong></summary>
@@ -365,7 +621,8 @@ Der AI-Assistent sollte mindestens diese Probleme identifizieren:
 2. Hardcodierte Secrets in der Konfiguration
 3. Fehlende Authentifizierung bei sensiblen Endpunkten
 
-**💡 Tipp**: Öffnen Sie `SECURITY_ISSUES.md` für detaillierte Hinweise zu den Schwachstellen.
+> [!IMPORTANT]
+> Öffnen Sie `SECURITY_ISSUES.md` für detaillierte Hinweise zu den Schwachstellen.
 
 </details>
 
@@ -374,7 +631,8 @@ Der AI-Assistent sollte mindestens diese Probleme identifizieren:
 
 ### Aufgabe
 
-**Problem**: Die `search()` Methode in `repositories/equipment.py` ist anfällig für SQL-Injection.
+> [!WARNING]
+> **Problem**: Die `search()` Methode in `repositories/equipment.py` ist anfällig für SQL-Injection.
 
 **Fragen Sie Ihren AI-Assistenten**:
 - "Wie behebe ich die SQL-Injection-Schwachstelle in dieser Methode?"
@@ -394,16 +652,18 @@ Der AI-Assistent sollte mindestens diese Probleme identifizieren:
 pytest test_equipment_properties.py -v
 ```
 
-**Vorher** (unsicher):
-```python
-sql = f"SELECT * FROM equipment WHERE name LIKE '%{query}%'"
-```
+> [!CAUTION]
+> **Vorher** (unsicher):
+> ```python
+> sql = f"SELECT * FROM equipment WHERE name LIKE '%{query}%'"
+> ```
 
-**Nachher** (sicher):
-```python
-sql = "SELECT * FROM equipment WHERE name LIKE ?"
-params = (f'%{query}%',)
-```
+> [!TIP]
+> **Nachher** (sicher):
+> ```python
+> sql = "SELECT * FROM equipment WHERE name LIKE ?"
+> params = (f'%{query}%',)
+> ```
 
 </details>
 
@@ -412,7 +672,8 @@ params = (f'%{query}%',)
 
 ### Aufgabe
 
-**Problem**: `config.py` enthält hardcodierte Secrets.
+> [!CAUTION]
+> **Problem**: `config.py` enthält hardcodierte Secrets die niemals in Git committed werden sollten.
 
 **Fragen Sie Ihren AI-Assistenten**:
 - "Wie verschiebe ich hardcodierte Secrets in Umgebungsvariablen?"
@@ -420,7 +681,10 @@ params = (f'%{query}%',)
 
 ### Implementierung
 
-1. Erstellen Sie eine `.env` Datei (und fügen Sie sie zu `.gitignore` hinzu!)
+> [!IMPORTANT]
+> Erstellen Sie eine `.env` Datei und fügen Sie sie zu `.gitignore` hinzu!
+
+1. Erstellen Sie eine `.env` Datei
 2. Verschieben Sie Secrets aus `config.py` in die `.env` Datei
 3. Laden Sie Secrets aus Umgebungsvariablen
 
@@ -434,11 +698,10 @@ grep -r "hardcoded-secret" .  # Sollte nichts finden
 
 ---
 
-## Phase 3: Performance-Optimierung (45 Minuten)
+## Phase 4: Performance-Optimierung (45 Minuten)
 
-### Lernziel
-
-Identifizieren und beheben Sie Performance-Engpässe mit AI-Unterstützung.
+> [!NOTE]
+> **Lernziel**: Identifizieren und beheben Sie Performance-Engpässe mit AI-Unterstützung.
 
 
 <details>
@@ -462,7 +725,8 @@ Identifizieren und beheben Sie Performance-Engpässe mit AI-Unterstützung.
 
 Sie sollten feststellen: Bei 10 Anlagen werden 11 Queries ausgeführt (1 + 10).
 
-**💡 Tipp**: Siehe `PERFORMANCE_ISSUES.md` für detaillierte Erklärungen.
+> [!IMPORTANT]
+> Siehe `PERFORMANCE_ISSUES.md` für detaillierte Erklärungen.
 
 </details>
 
@@ -561,11 +825,10 @@ Sollte jetzt "SEARCH ... USING INDEX" anzeigen statt "SCAN".
 
 ---
 
-## Phase 4: Property-Based Testing (45 Minuten)
+## Phase 5: Property-Based Testing (45 Minuten)
 
-### Lernziel
-
-Verstehen und erweitern Sie Property-Based Tests mit Hypothesis.
+> [!NOTE]
+> **Lernziel**: Verstehen und erweitern Sie Property-Based Tests mit Hypothesis.
 
 <details>
 <summary><strong>Task 3.1: Property-Based Testing verstehen</strong></summary>
@@ -664,11 +927,10 @@ def test_equipment_roundtrip(equipment):
 
 ---
 
-## Phase 5: Containerisierung (30 Minuten)
+## Phase 6: Containerisierung (30 Minuten)
 
-### Lernziel
-
-Containerisieren Sie die Anwendung für moderne Deployment-Praktiken.
+> [!NOTE]
+> **Lernziel**: Containerisieren Sie die Anwendung für moderne Deployment-Praktiken.
 
 <details>
 <summary><strong>Task 4.1: Dockerfile erstellen</strong></summary>
