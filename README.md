@@ -1341,7 +1341,6 @@ Implementieren Sie Token-Ablauf für Authentifizierung.
 ### Weiterführende Links
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Hypothesis Documentation](https://hypothesis.readthedocs.io/)
-- [Flask Security Best Practices](https://flask.palletsprojects.com/en/3.0.x/security/)
 - [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
 
 ---
