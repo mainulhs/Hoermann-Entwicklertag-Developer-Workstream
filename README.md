@@ -154,20 +154,35 @@ sequenceDiagram
 2. **Öffnen Sie den Projektordner** in Ihrer IDE
 3. **Erstellen Sie eine virtuelle Python-Umgebung**:
    ```bash
+   # Versuchen Sie zuerst:
    python -m venv venv
-   source venv/bin/activate  # Auf Windows: venv\Scripts\activate
+   # Falls das nicht funktioniert:
+   python3 -m venv venv
+   
+   # Aktivieren:
+   source venv/bin/activate      # Mac/Linux
+   venv\Scripts\activate         # Windows
    ```
 4. **Installieren Sie die Abhängigkeiten**:
    ```bash
    pip install -r requirements.txt
+   # Falls pip nicht funktioniert:
+   pip3 install -r requirements.txt
    ```
 
 ### Überprüfung
 
 ```bash
-python --version  # Sollte Python 3.8+ anzeigen
-pip list  # Sollte Flask, Hypothesis, pytest zeigen
+# Python-Version prüfen (versuchen Sie beide Befehle)
+python --version   # Sollte Python 3.8+ anzeigen
+python3 --version  # Alternative, falls python nicht funktioniert
+
+# Installierte Pakete prüfen
+pip list    # Sollte Flask, Hypothesis, pytest zeigen
+pip3 list   # Alternative, falls pip nicht funktioniert
 ```
+
+**💡 Hinweis**: Auf Windows-Systemen funktioniert meist `python` und `pip`. Auf manchen Systemen (Mac/Linux) müssen Sie `python3` und `pip3` verwenden.
 
 </details>
 
@@ -179,6 +194,8 @@ pip list  # Sollte Flask, Hypothesis, pytest zeigen
 1. **Starten Sie die Anwendung**:
    ```bash
    python app.py
+   # Falls das nicht funktioniert:
+   python3 app.py
    ```
 
 2. **Öffnen Sie im Browser**: http://localhost:5000
