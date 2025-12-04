@@ -360,7 +360,10 @@ Analysieren Sie die bestehende Anwendung und identifizieren Sie fehlende Equipme
 - "Öffne `routes/web.py` - Welche Equipment-Routen existieren bereits?"
 - "Vergleiche die beiden Dateien - welche Funktionen fehlen in der Web-UI?"
 
-### Erwartetes Ergebnis
+<details>
+<summary>💡 <strong>Hinweis: Erwartetes Ergebnis</strong> (klicken zum Anzeigen)</summary>
+
+<br>
 
 Sie sollten feststellen:
 - ✅ `equipment_manager.py` hat `update_equipment()` und `delete_equipment()` Methoden
@@ -369,8 +372,9 @@ Sie sollten feststellen:
 - ❌ Es gibt **keine** Route zum Löschen von Equipment
 - ❌ Es gibt **keine** Template-Seite für Equipment-Bearbeitung
 
-> [!IMPORTANT]
-> Ihre Aufgabe: Implementieren Sie die fehlenden Edit- und Delete-Funktionen!
+🎯 **Ihre Aufgabe**: Implementieren Sie die fehlenden Edit- und Delete-Funktionen!
+
+</details>
 
 </details>
 
@@ -516,8 +520,7 @@ def equipment_delete(equipment_id: str):
         pass
 ```
 
-> [!CAUTION]
-> Löschen ist eine destruktive Operation! Stellen Sie sicher, dass Benutzer bestätigen müssen, bevor Equipment gelöscht wird.
+⚠️ **ACHTUNG**: Löschen ist eine destruktive Operation! Stellen Sie sicher, dass Benutzer bestätigen müssen, bevor Equipment gelöscht wird.
 
 </details>
 
@@ -590,8 +593,7 @@ Testen Sie den kompletten Equipment-Management-Workflow.
 ✅ Gelöschtes Equipment erscheint nicht mehr in der Liste  
 ✅ Fehlermeldungen werden korrekt angezeigt  
 
-> [!TIP]
-> Nutzen Sie die Browser-Entwicklertools (F12), um Netzwerk-Requests und eventuelle JavaScript-Fehler zu überprüfen.
+💡 **Tipp**: Nutzen Sie die Browser-Entwicklertools (F12), um Netzwerk-Requests und eventuelle JavaScript-Fehler zu überprüfen.
 
 </details>
 
@@ -600,43 +602,49 @@ Testen Sie den kompletten Equipment-Management-Workflow.
 ## Phase 3: Code-Review und Sicherheitsanalyse (30 Minuten)
 
 > [!NOTE]
-> **Lernziel**: Nutzen Sie AI-Tools, um Sicherheitslücken in bestehendem Code zu identifizieren.
+> **Lernziel**: Nutzen Sie AI-Tools (Q Developer, Kiro, Copilot), um Sicherheitslücken in bestehendem Code zu identifizieren.
 
 <details>
-<summary><strong>Task 2.1: Codebase-Analyse</strong></summary>
+<summary><strong>Task 3.1: Codebase-Analyse</strong></summary>
 
 ### Aufgabe
 
-Nutzen Sie Ihren AI-Assistenten für eine erste Analyse:
+Nutzen Sie Ihren AI-Assistenten für eine erste Sicherheitsanalyse der Codebasis.
 
-**Fragen Sie**:
+**Fragen Sie Ihren AI-Assistenten**:
 - "Analysiere die Datei `repositories/equipment.py` auf Sicherheitsprobleme"
-- "Finde SQL-Injection-Schwachstellen in diesem Projekt"
-- "Überprüfe `config.py` auf hardcodierte Secrets"
+- "Überprüfe `config.py` auf Sicherheitsrisiken"
+- "Untersuche `routes/api.py` auf fehlende Sicherheitsmaßnahmen"
 
-### Erwartetes Ergebnis
+**Ihre Aufgabe**: Lassen Sie den AI-Assistenten die Dateien analysieren und dokumentieren Sie die gefundenen Probleme.
+
+<details>
+<summary>💡 <strong>Hinweis: Erwartete Sicherheitsprobleme</strong> (klicken zum Anzeigen)</summary>
+
+<br>
 
 Der AI-Assistent sollte mindestens diese Probleme identifizieren:
-1. SQL-Injection in der `search()` Methode
-2. Hardcodierte Secrets in der Konfiguration
-3. Fehlende Authentifizierung bei sensiblen Endpunkten
+1. **SQL-Injection** in der `search()` Methode
+2. **Hardcodierte Secrets** in der Konfiguration
+3. **Fehlende Authentifizierung** bei sensiblen API-Endpunkten
 
-> [!IMPORTANT]
-> Öffnen Sie `SECURITY_ISSUES.md` für detaillierte Hinweise zu den Schwachstellen.
+📄 **Detaillierte Hinweise**: Öffnen Sie `SECURITY_ISSUES.md` für ausführliche Erklärungen zu den Schwachstellen.
+
+</details>
 
 </details>
 
 <details>
-<summary><strong>Task 2.2: SQL-Injection beheben</strong></summary>
+<summary><strong>Task 3.2: Sicherheitsproblem in Equipment-Repository beheben</strong></summary>
 
 ### Aufgabe
 
-> [!WARNING]
-> **Problem**: Die `search()` Methode in `repositories/equipment.py` ist anfällig für SQL-Injection.
+⚠️ **Problem**: Die `search()` Methode in `repositories/equipment.py` hat eine Sicherheitslücke.
 
 **Fragen Sie Ihren AI-Assistenten**:
-- "Wie behebe ich die SQL-Injection-Schwachstelle in dieser Methode?"
+- "Wie behebe ich die Sicherheitslücke in der search() Methode?"
 - "Zeige mir, wie ich parametrisierte Queries verwende"
+- "Was ist das Problem mit String-Konkatenation in SQL-Queries?"
 
 ### Implementierung
 
@@ -668,15 +676,15 @@ pytest test_equipment_properties.py -v
 </details>
 
 <details>
-<summary><strong>Task 2.3: Hardcodierte Secrets entfernen</strong></summary>
+<summary><strong>Task 3.3: Konfigurationssicherheit verbessern</strong></summary>
 
 ### Aufgabe
 
-> [!CAUTION]
-> **Problem**: `config.py` enthält hardcodierte Secrets die niemals in Git committed werden sollten.
+⚠️ **Problem**: `config.py` enthält sensible Daten, die nicht im Code stehen sollten.
 
 **Fragen Sie Ihren AI-Assistenten**:
-- "Wie verschiebe ich hardcodierte Secrets in Umgebungsvariablen?"
+- "Analysiere config.py - welche Daten sollten nicht im Code stehen?"
+- "Wie verschiebe ich sensible Konfigurationsdaten in Umgebungsvariablen?"
 - "Zeige mir, wie ich python-dotenv verwende"
 
 ### Implementierung
@@ -701,7 +709,7 @@ grep -r "hardcoded-secret" .  # Sollte nichts finden
 ## Phase 4: Performance-Optimierung (45 Minuten)
 
 > [!NOTE]
-> **Lernziel**: Identifizieren und beheben Sie Performance-Engpässe mit AI-Unterstützung.
+> **Lernziel**: Identifizieren und beheben Sie Performance-Engpässe mit AI-Unterstützung (Q Developer, Kiro, Copilot).
 
 
 <details>
@@ -828,7 +836,7 @@ Sollte jetzt "SEARCH ... USING INDEX" anzeigen statt "SCAN".
 ## Phase 5: Property-Based Testing (45 Minuten)
 
 > [!NOTE]
-> **Lernziel**: Verstehen und erweitern Sie Property-Based Tests mit Hypothesis.
+> **Lernziel**: Verstehen und erweitern Sie Property-Based Tests mit Hypothesis und AI-Unterstützung (Q Developer, Kiro, Copilot).
 
 <details>
 <summary><strong>Task 3.1: Property-Based Testing verstehen</strong></summary>
@@ -930,7 +938,7 @@ def test_equipment_roundtrip(equipment):
 ## Phase 6: Containerisierung (30 Minuten)
 
 > [!NOTE]
-> **Lernziel**: Containerisieren Sie die Anwendung für moderne Deployment-Praktiken.
+> **Lernziel**: Containerisieren Sie die Anwendung für moderne Deployment-Praktiken mit AI-Unterstützung (Q Developer, Kiro, Copilot).
 
 <details>
 <summary><strong>Task 4.1: Dockerfile erstellen</strong></summary>
