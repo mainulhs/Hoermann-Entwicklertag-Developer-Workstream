@@ -507,3 +507,14 @@ def login():
     
     # GET request - show login form
     return render_template('login.html')
+
+
+@web_bp.route('/logout')
+def logout():
+    """
+    Logout user
+    
+    GET /logout - Clear session and redirect to dashboard
+    """
+    session.clear()
+    return redirect(url_for('web.dashboard'))

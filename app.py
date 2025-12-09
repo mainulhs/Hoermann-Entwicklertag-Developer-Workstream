@@ -25,6 +25,7 @@ from routes.web import web_bp, init_web_services
 from utils.sample_data import SampleDataGenerator
 
 
+
 def create_app(config_path: str = "config.json") -> Flask:
     """
     Create and configure Flask application
@@ -85,6 +86,8 @@ def create_app(config_path: str = "config.json") -> Flask:
     # Store database manager in app context
     app.db_manager = db_manager
     
+
+    
     # Initialize services for API routes
     init_api_services(db_manager)
     print("✓ API services initialized")
@@ -97,6 +100,18 @@ def create_app(config_path: str = "config.json") -> Flask:
     app.register_blueprint(api_bp)
     app.register_blueprint(web_bp)
     print("✓ Routes registered")
+    
+    # Add translation function to template context
+    from utils.i18n import _
+    app.jinja_env.globals['_'] = _
+    
+    # Add language switching route
+    @app.route('/set_language/<language>')
+    def set_language(language):
+        from flask import redirect, request, session
+        if language in ['en', 'de']:
+            session['language'] = language
+        return redirect(request.referrer or '/')
     
     return app
 

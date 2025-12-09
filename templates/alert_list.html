@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Alarme - Industrielles Anlagenüberwachungssystem{% endblock %}
+{% block title %}{{ _('Alerts') }} - {{ _('Industrial Equipment Monitoring') }}{% endblock %}
 
 {% block content %}
-<h1 style="margin-bottom: 2rem;">System-Alarme</h1>
+<h1 style="margin-bottom: 2rem;">{{ _('System Alerts') }}</h1>
 
 {% if success %}
 <div class="alert alert-success">
@@ -13,7 +13,7 @@
 
 <!-- Active Alerts -->
 <div class="card">
-    <h2>🚨 Aktive Alarme ({{ active_alerts|length }})</h2>
+    <h2>🚨 {{ _('Active Alerts') }} ({{ active_alerts|length }})</h2>
     {% if active_alerts %}
     <table>
         <thead>
@@ -58,7 +58,7 @@
 
 <!-- Acknowledged Alerts -->
 <div class="card">
-    <h2>✓ Bestätigte Alarme ({{ acknowledged_alerts|length }})</h2>
+    <h2>✓ {{ _('Acknowledged Alerts') }} ({{ acknowledged_alerts|length }})</h2>
     {% if acknowledged_alerts %}
     <table>
         <thead>
@@ -93,16 +93,16 @@
         </tbody>
     </table>
     {% else %}
-    <p>Keine bestätigten Alarme.</p>
+    <p>{{ _('No acknowledged alerts.') }}</p>
     {% endif %}
 </div>
 
 <!-- Alert Statistics -->
 <div class="card">
-    <h2>📊 Alarm-Statistiken</h2>
+    <h2>📊 {{ _('Alert Statistics') }}</h2>
     <div class="grid grid-2">
         <div>
-            <h3 style="margin-bottom: 1rem;">Nach Schweregrad</h3>
+            <h3 style="margin-bottom: 1rem;">{{ _('By Severity') }}</h3>
             <table>
                 <tr>
                     <td><span class="badge badge-critical">KRITISCH</span></td>
@@ -123,18 +123,18 @@
             </table>
         </div>
         <div>
-            <h3 style="margin-bottom: 1rem;">Nach Status</h3>
+            <h3 style="margin-bottom: 1rem;">{{ _('By Status') }}</h3>
             <table>
                 <tr>
-                    <td>Aktiv</td>
+                    <td>{{ _('Active') }}</td>
                     <td><strong>{{ active_alerts|length }}</strong></td>
                 </tr>
                 <tr>
-                    <td>Bestätigt</td>
+                    <td>{{ _('Acknowledged') }}</td>
                     <td><strong>{{ acknowledged_alerts|length }}</strong></td>
                 </tr>
                 <tr>
-                    <td>Gesamt</td>
+                    <td>{{ _('Total') }}</td>
                     <td><strong>{{ (active_alerts|length) + (acknowledged_alerts|length) }}</strong></td>
                 </tr>
             </table>

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Wartungsaufzeichnungen - Industrielles Anlagenüberwachungssystem{% endblock %}
+{% block title %}{{ _('Maintenance Records') }} - {{ _('Industrial Equipment Monitoring') }}{% endblock %}
 
 {% block content %}
-<h1 style="margin-bottom: 2rem;">Wartungsaufzeichnungen</h1>
+<h1 style="margin-bottom: 2rem;">{{ _('Maintenance Records') }}</h1>
 
 <!-- Overdue Maintenance -->
 {% if overdue_maintenance %}
 <div class="card">
-    <h2>⚠️ Überfällige Wartungen ({{ overdue_maintenance|length }})</h2>
+    <h2>⚠️ {{ _('Overdue Maintenance') }} ({{ overdue_maintenance|length }})</h2>
     <table>
         <thead>
             <tr>
@@ -28,7 +28,7 @@
                 <td>{{ record.description or '-' }}</td>
                 <td>
                     <span class="badge badge-critical">
-                        {{ record.days_overdue }} Tage
+                        {{ record.days_overdue }} {{ _('days') }}
                     </span>
                 </td>
             </tr>
@@ -40,7 +40,7 @@
 
 <!-- All Maintenance Records -->
 <div class="card">
-    <h2>Alle Wartungsaufzeichnungen ({{ maintenance_records|length }})</h2>
+    <h2>{{ _('All Maintenance Records') }} ({{ maintenance_records|length }})</h2>
     {% if maintenance_records %}
     <table>
         <thead>
@@ -79,22 +79,22 @@
         </tbody>
     </table>
     {% else %}
-    <p>Keine Wartungsaufzeichnungen gefunden.</p>
+    <p>{{ _('No maintenance records found.') }}</p>
     {% endif %}
 </div>
 
 <!-- Filter Options -->
 <div class="card">
-    <h2>Wartungsaufzeichnungen filtern</h2>
+    <h2>{{ _('Filter Maintenance Records') }}</h2>
     <form method="GET" action="/maintenance">
         <div class="grid grid-2">
             <div class="form-group">
-                <label for="equipment_id">Anlagen-ID</label>
+                <label for="equipment_id">{{ _('Equipment ID') }}</label>
                 <input 
                     type="text" 
                     id="equipment_id" 
                     name="equipment_id" 
-                    placeholder="Nach Anlagen-ID filtern"
+                    placeholder="{{ _('Filter by equipment ID') }}"
                     value="{{ request.args.equipment_id or '' }}"
                 >
             </div>
@@ -111,8 +111,8 @@
         </div>
         
         <div style="display: flex; gap: 1rem;">
-            <button type="submit" class="btn btn-primary">Filter anwenden</button>
-            <a href="/maintenance" class="btn" style="background-color: #95a5a6; color: white;">Filter zurücksetzen</a>
+            <button type="submit" class="btn btn-primary">{{ _('Apply Filter') }}</button>
+            <a href="/maintenance" class="btn" style="background-color: #95a5a6; color: white;">{{ _('Reset Filter') }}</a>
         </div>
     </form>
 </div>

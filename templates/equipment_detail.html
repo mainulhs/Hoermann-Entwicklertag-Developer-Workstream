@@ -1,41 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}{{ equipment.name }} - Industrielles Anlagenüberwachungssystem{% endblock %}
+{% block title %}{{ equipment.name }} - {{ _('Industrial Equipment Monitoring') }}{% endblock %}
 
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
     <h1>{{ equipment.name }}</h1>
     <div style="display: flex; gap: 1rem;">
-        <a href="{{ url_for('web.equipment_edit', equipment_id=equipment.equipment_id) }}" class="btn btn-primary">Bearbeiten</a>
+        <a href="{{ url_for('web.equipment_edit', equipment_id=equipment.equipment_id) }}" class="btn btn-primary">{{ _('Edit') }}</a>
         <form method="POST" action="{{ url_for('web.equipment_delete', equipment_id=equipment.equipment_id) }}" style="display: inline;" onsubmit="return confirm('Möchten Sie dieses Equipment wirklich löschen?');">
-            <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">Löschen</button>
+            <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">{{ _('Delete') }}</button>
         </form>
-        <a href="/" class="btn" style="background-color: #95a5a6; color: white;">← Zurück zum Dashboard</a>
+        <a href="/" class="btn" style="background-color: #95a5a6; color: white;">← {{ _('Back to Dashboard') }}</a>
     </div>
 </div>
 
 <!-- Equipment Details -->
 <div class="card">
-    <h2>Anlagendetails</h2>
+    <h2>{{ _('Equipment Details') }}</h2>
     <table>
         <tr>
-            <th style="width: 200px;">Anlagen-ID</th>
+            <th style="width: 200px;">{{ _('Equipment ID') }}</th>
             <td><strong>{{ equipment.equipment_id }}</strong></td>
         </tr>
         <tr>
-            <th>Name</th>
+            <th>{{ _('Name') }}</th>
             <td>{{ equipment.name }}</td>
         </tr>
         <tr>
-            <th>Typ</th>
+            <th>{{ _('Type') }}</th>
             <td>{{ equipment.type }}</td>
         </tr>
         <tr>
-            <th>Standort</th>
+            <th>{{ _('Location') }}</th>
             <td>{{ equipment.location }}</td>
         </tr>
         <tr>
-            <th>Status</th>
+            <th>{{ _('Status') }}</th>
             <td>
                 <span class="badge badge-{{ equipment.status }}">
                     {{ equipment.status|upper }}
@@ -43,7 +43,7 @@
             </td>
         </tr>
         <tr>
-            <th>Erstellt</th>
+            <th>{{ _('Created') }}</th>
             <td>{{ equipment.created_at }}</td>
         </tr>
     </table>
@@ -51,15 +51,15 @@
 
 <!-- Recent Sensor Readings -->
 <div class="card">
-    <h2>Aktuelle Messwerte</h2>
+    <h2>{{ _('Recent Sensor Readings') }}</h2>
     {% if sensor_readings %}
     <table>
         <thead>
             <tr>
-                <th>Sensortyp</th>
-                <th>Wert</th>
-                <th>Einheit</th>
-                <th>Zeitstempel</th>
+                <th>{{ _('Sensor Type') }}</th>
+                <th>{{ _('Value') }}</th>
+                <th>{{ _('Unit') }}</th>
+                <th>{{ _('Timestamp') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -74,22 +74,22 @@
         </tbody>
     </table>
     {% else %}
-    <p>Noch keine Messwerte erfasst.</p>
+    <p>{{ _('No readings recorded yet.') }}</p>
     {% endif %}
 </div>
 
 <!-- Alerts -->
 <div class="card">
-    <h2>Alarme</h2>
+    <h2>{{ _('Alerts') }}</h2>
     {% if alerts %}
     <table>
         <thead>
             <tr>
-                <th>Typ</th>
-                <th>Schweregrad</th>
-                <th>Nachricht</th>
-                <th>Status</th>
-                <th>Erstellt</th>
+                <th>{{ _('Type') }}</th>
+                <th>{{ _('Severity') }}</th>
+                <th>{{ _('Message') }}</th>
+                <th>{{ _('Status') }}</th>
+                <th>{{ _('Created') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -113,22 +113,22 @@
         </tbody>
     </table>
     {% else %}
-    <p>Keine Alarme für diese Anlage.</p>
+    <p>{{ _('No alerts for this equipment.') }}</p>
     {% endif %}
 </div>
 
 <!-- Maintenance History -->
 <div class="card">
-    <h2>Wartungsverlauf</h2>
+    <h2>{{ _('Maintenance History') }}</h2>
     {% if maintenance_records %}
     <table>
         <thead>
             <tr>
-                <th>Typ</th>
-                <th>Geplantes Datum</th>
-                <th>Abschlussdatum</th>
-                <th>Status</th>
-                <th>Beschreibung</th>
+                <th>{{ _('Type') }}</th>
+                <th>{{ _('Scheduled Date') }}</th>
+                <th>{{ _('Completion Date') }}</th>
+                <th>{{ _('Status') }}</th>
+                <th>{{ _('Description') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -148,7 +148,7 @@
         </tbody>
     </table>
     {% else %}
-    <p>Keine Wartungsaufzeichnungen für diese Anlage.</p>
+    <p>{{ _('No maintenance records for this equipment.') }}</p>
     {% endif %}
 </div>
 {% endblock %}

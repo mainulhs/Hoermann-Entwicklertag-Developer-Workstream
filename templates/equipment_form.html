@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}Anlage registrieren - Industrielles Anlagenüberwachungssystem{% endblock %}
+{% block title %}{{ _('Register Equipment') }} - {{ _('Industrial Equipment Monitoring') }}{% endblock %}
 
 {% block content %}
-<h1 style="margin-bottom: 2rem;">Neue Anlage registrieren</h1>
+<h1 style="margin-bottom: 2rem;">{{ _('Register Equipment') }}</h1>
 
 {% if error %}
 <div class="alert alert-error">
-    <strong>Fehler:</strong> {{ error }}
+    <strong>{{ _('Error') }}:</strong> {{ error }}
 </div>
 {% endif %}
 
 {% if success %}
 <div class="alert alert-success">
-    <strong>Erfolg!</strong> Anlage erfolgreich registriert.
-    <a href="/">Zurück zum Dashboard</a>
+    <strong>{{ _('Success') }}!</strong> {{ _('Equipment registered successfully.') }}
+    <a href="/">{{ _('Back to Dashboard') }}</a>
 </div>
 {% endif %}
 
 <div class="card">
-    <h2>Anlagen-Informationen</h2>
+    <h2>{{ _('Equipment Information') }}</h2>
     <form method="POST" action="/equipment/new">
         <div class="form-group">
-            <label for="equipment_id">Anlagen-ID *</label>
+            <label for="equipment_id">{{ _('Equipment ID') }} *</label>
             <input 
                 type="text" 
                 id="equipment_id" 
@@ -31,11 +31,11 @@
                 placeholder="z.B. PUMPE-001"
                 value="{{ request.form.equipment_id or '' }}"
             >
-            <small style="color: #666;">Eindeutige Kennung für diese Anlage</small>
+            <small style="color: #666;">{{ _('Unique identifier for this equipment') }}</small>
         </div>
         
         <div class="form-group">
-            <label for="name">Anlagenname *</label>
+            <label for="name">{{ _('Equipment Name') }} *</label>
             <input 
                 type="text" 
                 id="name" 
@@ -47,11 +47,11 @@
         </div>
         
         <div class="form-group">
-            <label for="type">Anlagentyp *</label>
+            <label for="type">{{ _('Equipment Type') }} *</label>
             <select id="type" name="type" required>
-                <option value="">Typ auswählen...</option>
-                <option value="pumpe" {% if request.form.type == 'pumpe' %}selected{% endif %}>Pumpe</option>
-                <option value="motor" {% if request.form.type == 'motor' %}selected{% endif %}>Motor</option>
+                <option value="">{{ _('Select type...') }}</option>
+                <option value="pumpe" {% if request.form.type == 'pumpe' %}selected{% endif %}>{{ _('Pump') }}</option>
+                <option value="motor" {% if request.form.type == 'motor' %}selected{% endif %}>{{ _('Motor') }}</option>
                 <option value="förderband" {% if request.form.type == 'förderband' %}selected{% endif %}>Förderband</option>
                 <option value="sensor" {% if request.form.type == 'sensor' %}selected{% endif %}>Sensor</option>
                 <option value="kompressor" {% if request.form.type == 'kompressor' %}selected{% endif %}>Kompressor</option>
@@ -61,7 +61,7 @@
         </div>
         
         <div class="form-group">
-            <label for="location">Standort *</label>
+            <label for="location">{{ _('Location') }} *</label>
             <input 
                 type="text" 
                 id="location" 
@@ -73,17 +73,17 @@
         </div>
         
         <div class="form-group">
-            <label for="status">Status</label>
+            <label for="status">{{ _('Status') }}</label>
             <select id="status" name="status">
-                <option value="active" {% if not request.form.status or request.form.status == 'active' %}selected{% endif %}>Aktiv</option>
-                <option value="inactive" {% if request.form.status == 'inactive' %}selected{% endif %}>Inaktiv</option>
-                <option value="maintenance" {% if request.form.status == 'maintenance' %}selected{% endif %}>Wartung</option>
+                <option value="active" {% if not request.form.status or request.form.status == 'active' %}selected{% endif %}>{{ _('Active') }}</option>
+                <option value="inactive" {% if request.form.status == 'inactive' %}selected{% endif %}>{{ _('Inactive') }}</option>
+                <option value="maintenance" {% if request.form.status == 'maintenance' %}selected{% endif %}>{{ _('Maintenance') }}</option>
             </select>
         </div>
         
         <div style="display: flex; gap: 1rem;">
-            <button type="submit" class="btn btn-primary">Anlage registrieren</button>
-            <a href="/" class="btn" style="background-color: #95a5a6; color: white;">Abbrechen</a>
+            <button type="submit" class="btn btn-primary">{{ _('Register Equipment') }}</button>
+            <a href="/" class="btn" style="background-color: #95a5a6; color: white;">{{ _('Cancel') }}</a>
         </div>
     </form>
 </div>

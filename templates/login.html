@@ -1,66 +1,65 @@
 {% extends "base.html" %}
 
-{% block title %}Anmelden - Industrielles Anlagenüberwachungssystem{% endblock %}
+{% block title %}{{ _('Login') }} - {{ _('Industrial Equipment Monitoring') }}{% endblock %}
 
 {% block content %}
 <div style="max-width: 500px; margin: 4rem auto;">
-    <h1 style="text-align: center; margin-bottom: 2rem;">Anmelden</h1>
+    <h1 style="text-align: center; margin-bottom: 2rem;">{{ _('Login') }}</h1>
     
     {% if error %}
     <div class="alert alert-error">
-        <strong>Fehler:</strong> {{ error }}
+        <strong>{{ _('Error') }}:</strong> {{ error }}
     </div>
     {% endif %}
     
     {% if success %}
     <div class="alert alert-success">
-        <strong>Erfolg!</strong> {{ success }}
+        <strong>{{ _('Success') }}!</strong> {{ success }}
     </div>
     {% endif %}
     
     <div class="card">
-        <h2>Anmeldung</h2>
+        <h2>{{ _('Login') }}</h2>
         <form method="POST" action="/login">
             <div class="form-group">
-                <label for="username">Benutzername</label>
+                <label for="username">{{ _('Username') }}</label>
                 <input 
                     type="text" 
                     id="username" 
                     name="username" 
                     required 
-                    placeholder="Benutzername eingeben"
+                    placeholder="{{ _('Username') }}"
                     value="{{ request.form.username or '' }}"
                     autofocus
                 >
             </div>
             
             <div class="form-group">
-                <label for="password">Passwort</label>
+                <label for="password">{{ _('Password') }}</label>
                 <input 
                     type="password" 
                     id="password" 
                     name="password" 
                     required 
-                    placeholder="Passwort eingeben"
+                    placeholder="{{ _('Password') }}"
                 >
             </div>
             
             <button type="submit" class="btn btn-primary" style="width: 100%;">
-                Anmelden
+                {{ _('Login') }}
             </button>
         </form>
     </div>
     
     <div class="card">
-        <h2>Demo-Zugangsdaten</h2>
-        <p>Für Testzwecke können Sie diese Demo-Zugangsdaten verwenden:</p>
+        <h2>{{ _('Demo Credentials') }}</h2>
+        <p>{{ _('For testing purposes, you can use these demo credentials:') }}</p>
         <ul style="margin-left: 2rem; margin-top: 1rem;">
-            <li><strong>Benutzername:</strong> admin</li>
-            <li><strong>Passwort:</strong> admin123</li>
+            <li><strong>{{ _('Username') }}:</strong> admin</li>
+            <li><strong>{{ _('Password') }}:</strong> admin123</li>
         </ul>
         <p style="margin-top: 1rem; color: #e74c3c;">
-            <strong>⚠️ Sicherheitshinweis:</strong> Dies ist eine Workshop-Anwendung mit absichtlichen Sicherheitslücken. 
-            Nicht in Produktion verwenden!
+            <strong>⚠️ {{ _('Security Warning') }}:</strong> {{ _('This is a workshop application with intentional security vulnerabilities. Do not use in production!') }}
         </p>
     </div>
 </div>
