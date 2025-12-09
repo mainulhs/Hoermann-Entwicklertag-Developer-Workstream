@@ -62,3 +62,27 @@ CREATE TABLE IF NOT EXISTS users (
     role TEXT DEFAULT 'operator',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Performance Indexes
+-- These indexes significantly improve query performance for common operations
+
+-- Index for sensor readings by equipment (used in dashboard and equipment detail pages)
+CREATE INDEX IF NOT EXISTS idx_sensor_readings_equipment ON sensor_readings(equipment_id);
+
+-- Index for sensor readings by timestamp (used for time-based queries)
+CREATE INDEX IF NOT EXISTS idx_sensor_readings_timestamp ON sensor_readings(timestamp DESC);
+
+-- Composite index for equipment + timestamp (optimizes latest reading queries)
+CREATE INDEX IF NOT EXISTS idx_sensor_readings_equipment_timestamp ON sensor_readings(equipment_id, timestamp DESC);
+
+-- Index for alerts by equipment
+CREATE INDEX IF NOT EXISTS idx_alerts_equipment ON alerts(equipment_id);
+
+-- Index for alerts by status (used for active alerts queries)
+CREATE INDEX IF NOT EXISTS idx_alerts_status ON alerts(status);
+
+-- Index for maintenance by equipment
+CREATE INDEX IF NOT EXISTS idx_maintenance_equipment ON maintenance(equipment_id);
+
+-- Index for maintenance by scheduled date (used for overdue maintenance)
+CREATE INDEX IF NOT EXISTS idx_maintenance_scheduled_date ON maintenance(scheduled_date);

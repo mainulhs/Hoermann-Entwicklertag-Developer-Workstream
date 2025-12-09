@@ -5,7 +5,13 @@
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
     <h1>{{ equipment.name }}</h1>
-    <a href="/" class="btn btn-primary">← Zurück zum Dashboard</a>
+    <div style="display: flex; gap: 1rem;">
+        <a href="{{ url_for('web.equipment_edit', equipment_id=equipment.equipment_id) }}" class="btn btn-primary">Bearbeiten</a>
+        <form method="POST" action="{{ url_for('web.equipment_delete', equipment_id=equipment.equipment_id) }}" style="display: inline;" onsubmit="return confirm('Möchten Sie dieses Equipment wirklich löschen?');">
+            <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">Löschen</button>
+        </form>
+        <a href="/" class="btn" style="background-color: #95a5a6; color: white;">← Zurück zum Dashboard</a>
+    </div>
 </div>
 
 <!-- Equipment Details -->

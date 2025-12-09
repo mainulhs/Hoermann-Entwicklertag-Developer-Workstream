@@ -134,11 +134,7 @@ class EquipmentRepository:
         """
         Search equipment by name
         
-        INTENTIONAL SECURITY VULNERABILITY: SQL Injection
-        This method uses string concatenation instead of parameterized queries,
-        making it vulnerable to SQL injection attacks.
-        
-        Example exploit: query = "' OR '1'='1"
+        FIXED: Uses parameterized queries to prevent SQL injection
         
         Args:
             query: Search query string
@@ -146,7 +142,7 @@ class EquipmentRepository:
         Returns:
             List of matching equipment dictionaries
         """
-        # VULNERABLE CODE - DO NOT USE IN PRODUCTION
-        # Using string concatenation instead of parameterized query
-        sql = f"SELECT * FROM equipment WHERE name LIKE '%{query}%'"
-        return self.db.execute_query(sql, ())
+        # SECURE CODE - Uses parameterized query
+        sql = "SELECT * FROM equipment WHERE name LIKE ?"
+        search_pattern = f"%{query}%"
+        return self.db.execute_query(sql, (search_pattern,))

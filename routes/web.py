@@ -189,6 +189,70 @@ def equipment_detail(equipment_id: str):
         )
 
 
+@web_bp.route('/equipment/<equipment_id>/edit', methods=['GET', 'POST'])
+def equipment_edit(equipment_id: str):
+    """
+    Equipment edit form
+    
+    GET /equipment/<id>/edit - Display edit form
+    POST /equipment/<id>/edit - Handle equipment update
+    """
+    if request.method == 'POST':
+        try:
+            # Get form data
+            equipment_data = {
+                'name': request.form.get('name'),
+                'type': request.form.get('type'),
+                'location': request.form.get('location'),
+                'status': request.form.get('status', 'active')
+            }
+            
+            # Update equipment
+            result = equipment_manager.update_equipment(equipment_id, equipment_data)
+            
+            if result.success:
+                return redirect(url_for('web.equipment_detail', equipment_id=equipment_id))
+            else:
+                equipment = equipment_manager.get_equipment_status(equipment_id)
+                return render_template(
+                    'equipment_edit.html',
+                    equipment=equipment,
+                    error=result.error_message
+                )
+        except Exception as e:
+            equipment = equipment_manager.get_equipment_status(equipment_id)
+            return render_template(
+                'equipment_edit.html',
+                equipment=equipment,
+                error=f"Error updating equipment: {str(e)}"
+            )
+    
+    # GET request - show edit form
+    try:
+        equipment = equipment_manager.get_equipment_status(equipment_id)
+        return render_template('equipment_edit.html', equipment=equipment)
+    except ValueError as e:
+        return redirect(url_for('web.dashboard'))
+
+
+@web_bp.route('/equipment/<equipment_id>/delete', methods=['POST'])
+def equipment_delete(equipment_id: str):
+    """
+    Delete equipment
+    
+    POST /equipment/<id>/delete
+    """
+    try:
+        result = equipment_manager.delete_equipment(equipment_id)
+        
+        if result.success:
+            return redirect(url_for('web.dashboard'))
+        else:
+            return redirect(url_for('web.equipment_detail', equipment_id=equipment_id))
+    except Exception as e:
+        return redirect(url_for('web.equipment_detail', equipment_id=equipment_id))
+
+
 # ============================================================================
 # Sensor Routes
 # ============================================================================

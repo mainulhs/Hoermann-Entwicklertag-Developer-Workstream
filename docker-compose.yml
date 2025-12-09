@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./industrial_monitoring.db:/app/industrial_monitoring.db
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key}
+      - DATABASE_PATH=/app/industrial_monitoring.db
+    restart: unless-stopped

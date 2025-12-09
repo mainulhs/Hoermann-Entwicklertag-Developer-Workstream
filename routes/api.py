@@ -250,16 +250,22 @@ def delete_equipment(equipment_id: str):
     
     DELETE /api/equipment/<id>
     
-    INTENTIONAL SECURITY FLAW: Missing authentication check
-    Anyone can delete equipment without authentication!
+    FIXED: Requires authentication to delete equipment
+    
+    Headers:
+        Authorization: Bearer <token>
     
     Returns:
         200: Equipment deleted successfully
+        401: Authentication required
         404: Equipment not found
         500: Server error
     """
-    # VULNERABLE CODE - Missing authentication check
-    # Should have: require_auth()
+    # SECURE CODE - Authentication required
+    try:
+        require_auth()
+    except AuthenticationError as e:
+        return error_response(str(e), 401)
     
     try:
         result = equipment_manager.delete_equipment(equipment_id)

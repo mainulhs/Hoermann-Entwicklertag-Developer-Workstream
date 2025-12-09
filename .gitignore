@@ -46,3 +46,6 @@ Thumbs.db
 *.bak
 GERMAN_UI_SUMMARY.md
 translate_remaining.md
+
+# Environment variables (contains secrets)
+.env

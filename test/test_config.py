@@ -288,8 +288,8 @@ def test_get_database_url():
 
 
 @pytest.mark.unit
-def test_hardcoded_secrets():
-    """Test that hardcoded secrets are present (intentional security flaw)"""
+def test_environment_secrets():
+    """Test that secrets are loaded from environment variables (security fix)"""
     config_data = {
         'database': {'path': 'test.db'},
         'server': {'host': 'localhost', 'port': 5000},
@@ -303,9 +303,17 @@ def test_hardcoded_secrets():
     try:
         config = Config(temp_file)
         
-        # Verify hardcoded secrets exist (this is intentional for workshop)
-        assert config.get_secret_key() == "hardcoded-secret-key-12345"
-        assert config.get_api_key() == "sk_live_abc123xyz789"
+        # Verify secrets are loaded from environment with development fallbacks
+        secret_key = config.get_secret_key()
+        api_key = config.get_api_key()
+        
+        # Should not be the old hardcoded values
+        assert secret_key != "hardcoded-secret-key-12345"
+        assert api_key != "sk_live_abc123xyz789"
+        
+        # Should have development fallback values or environment values
+        assert len(secret_key) > 0
+        assert len(api_key) > 0
         
     finally:
         if os.path.exists(temp_file):

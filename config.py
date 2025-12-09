@@ -23,9 +23,9 @@ class Config:
     - These should be loaded from environment variables or secure vaults
     """
     
-    # INTENTIONAL SECURITY FLAW: Hardcoded secrets
-    SECRET_KEY = "hardcoded-secret-key-12345"
-    API_KEY = "sk_live_abc123xyz789"
+    # SECURE: Load secrets from environment variables
+    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+    API_KEY = os.getenv('API_KEY', 'dev-api-key-change-in-production')
     
     # Required configuration keys that must be present
     REQUIRED_SETTINGS = [
@@ -148,11 +148,10 @@ class Config:
         """
         Get secret key for session management
         
-        INTENTIONAL SECURITY FLAW: Returns hardcoded secret key
-        In production, this should load from environment variables or secure vault
+        FIXED: Loads from environment variables with fallback for development
         
         Returns:
-            Secret key (hardcoded)
+            Secret key from environment or development default
         """
         return self.SECRET_KEY
     
@@ -160,11 +159,10 @@ class Config:
         """
         Get API key for external service authentication
         
-        INTENTIONAL SECURITY FLAW: Returns hardcoded API key
-        In production, this should load from environment variables or secure vault
+        FIXED: Loads from environment variables with fallback for development
         
         Returns:
-            API key (hardcoded)
+            API key from environment or development default
         """
         return self.API_KEY
     

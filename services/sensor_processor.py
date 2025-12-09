@@ -279,10 +279,7 @@ class SensorProcessor:
         """
         Calculate statistics for sensor readings
         
-        INTENTIONAL PERFORMANCE ISSUE: Inefficient multi-pass calculation
-        This method iterates through the readings list multiple times,
-        once for each statistic. A more efficient approach would be to
-        calculate all statistics in a single pass.
+        OPTIMIZED: Single-pass calculation for all statistics
         
         Args:
             readings: List of sensor reading dictionaries
@@ -298,20 +295,21 @@ class SensorProcessor:
                 'count': 0
             }
         
-        # INEFFICIENT CODE - DO NOT USE IN PRODUCTION
-        # Each statistic requires a separate pass through the data
-        stats = {}
+        # Single pass calculation - much more efficient
+        count = len(readings)
+        total = 0.0
+        min_val = float('inf')
+        max_val = float('-inf')
         
-        # First pass: calculate minimum
-        stats['min'] = min([float(r['value']) for r in readings])
+        for reading in readings:
+            value = float(reading['value'])
+            total += value
+            min_val = min(min_val, value)
+            max_val = max(max_val, value)
         
-        # Second pass: calculate maximum
-        stats['max'] = max([float(r['value']) for r in readings])
-        
-        # Third pass: calculate average
-        stats['avg'] = sum([float(r['value']) for r in readings]) / len(readings)
-        
-        # Fourth pass: count (unnecessary since we have len())
-        stats['count'] = len(readings)
-        
-        return stats
+        return {
+            'min': min_val,
+            'max': max_val,
+            'avg': total / count,
+            'count': count
+        }

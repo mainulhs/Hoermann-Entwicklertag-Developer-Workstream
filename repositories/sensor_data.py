@@ -130,29 +130,60 @@ class SensorDataRepository:
         """
         Get the latest sensor reading for each equipment
         
-        INTENTIONAL PERFORMANCE ISSUE: N+1 Query Problem
-        This method first queries all equipment, then makes a separate query
-        for each equipment to get its latest reading. This results in N+1 queries
-        where N is the number of equipment items.
-        
-        A better approach would be to use a single query with window functions
-        or a subquery to get all latest readings at once.
+        OPTIMIZED: Uses a single query with window functions to avoid N+1 problem
         
         Returns:
             List of dictionaries containing equipment and their latest readings
         """
-        # INEFFICIENT CODE - DO NOT USE IN PRODUCTION
-        # First query: Get all equipment (1 query)
-        equipment_query = "SELECT * FROM equipment"
-        equipment_list = self.db.execute_query(equipment_query)
+        # Single optimized query using window functions
+        query = """
+            SELECT 
+                e.*,
+                sr.sensor_type,
+                sr.value,
+                sr.unit,
+                sr.timestamp
+            FROM equipment e
+            LEFT JOIN (
+                SELECT 
+                    equipment_id,
+                    sensor_type,
+                    value,
+                    unit,
+                    timestamp,
+                    ROW_NUMBER() OVER (PARTITION BY equipment_id ORDER BY timestamp DESC) as rn
+                FROM sensor_readings
+            ) sr ON e.equipment_id = sr.equipment_id AND sr.rn = 1
+            ORDER BY e.equipment_id
+        """
         
+        raw_results = self.db.execute_query(query)
+        
+        # Transform results to match expected format
         results = []
-        # N queries: One query per equipment item
-        for equipment in equipment_list:
-            reading = self.get_latest_for_equipment(equipment['equipment_id'])
+        for row in raw_results:
+            equipment = {
+                'equipment_id': row['equipment_id'],
+                'name': row['name'],
+                'type': row['type'],
+                'location': row['location'],
+                'status': row['status'],
+                'created_at': row['created_at']
+            }
+            
+            latest_reading = None
+            if row['sensor_type']:  # Has sensor data
+                latest_reading = {
+                    'equipment_id': row['equipment_id'],
+                    'sensor_type': row['sensor_type'],
+                    'value': row['value'],
+                    'unit': row['unit'],
+                    'timestamp': row['timestamp']
+                }
+            
             results.append({
                 'equipment': equipment,
-                'latest_reading': reading
+                'latest_reading': latest_reading
             })
         
         return results
